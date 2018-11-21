@@ -1,0 +1,7 @@
+  usename  | usesysid | usecreatedb | usesuper | userepl | usebypassrls |               passwd                | valuntil | useconfig 
+-----------+----------+-------------+----------+---------+--------------+-------------------------------------+----------+-----------
+ postgres  |       10 | t           | t        | t       | t            |                                     |          | 
+ homestead |    16384 | f           | t        | f       | f            | md5e2f66007a2d421ef2a3904d411908ca1 |          | 
+ forum_gb  |    16410 | f           | f        | f       | f            | md55fb82c41ad8d9a7b5e42ea78c7d72320 |          | 
+(3 rows)
+
