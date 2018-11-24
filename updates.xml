@@ -1,0 +1,19 @@
+<application>
+  <component name="UpdatesConfigurable">
+    <ignoredBuildNumbers>
+      <item value="182.3911.43" />
+      <item value="182.4129.45" />
+      <item value="182.4323.23" />
+      <item value="182.4323.64" />
+      <item value="182.4323.68" />
+      <item value="182.4505.42" />
+      <item value="182.4892.16" />
+      <item value="183.4284.56" />
+      <item value="183.4284.100" />
+    </ignoredBuildNumbers>
+    <option name="LAST_BUILD_CHECKED" value="PS-183.4139.30" />
+    <option name="LAST_TIME_CHECKED" value="1542683342550" />
+    <option name="THIRD_PARTY_PLUGINS_ALLOWED" value="true" />
+    <option name="UPDATE_CHANNEL_TYPE" value="eap" />
+  </component>
+</application>
