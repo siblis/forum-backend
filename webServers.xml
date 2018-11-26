@@ -1,0 +1,14 @@
+<application>
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="85b98795-3b6a-4412-8c02-6d149bdccc8b" name="a-kozlov-shop.h1n.ru" url="http://a-kozlov-demo.h1n.ru">
+        <fileTransfer host="s1.hostiman.ru" port="21" rootFolder="/www/a-kozlov-shop.h1n.ru">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</application>
