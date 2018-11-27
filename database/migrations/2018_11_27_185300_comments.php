@@ -18,8 +18,8 @@ class Comments extends Migration
             $table->integer('user_id');
             $table->integer('topic_id');
             $table->text('content');
-            $table->integer('like');
-            $table->integer('dislike');
+            $table->integer('like')->default(0);
+            $table->integer('dislike')->default(0);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('topic_id')->references('id')->on('topics');
