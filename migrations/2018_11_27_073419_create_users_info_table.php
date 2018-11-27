@@ -23,7 +23,7 @@ class CreateUsersInfoTable extends Migration
             $table->string('job');
             $table->integer('rating');
             $table->integer('rule');
-            $table->timestamps('email_verified');
+            $table->timestamp('email_verified')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });
