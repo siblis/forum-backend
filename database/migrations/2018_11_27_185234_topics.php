@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTopicsTable extends Migration
+class Topics extends Migration
 {
     /**
      * Run the migrations.
@@ -21,9 +21,9 @@ class CreateTopicsTable extends Migration
             $table->string('title');
             $table->string('description');
             $table->text('content');
-            $table->integer('views');
-            $table->integer('like');
-            $table->integer('dislike');
+            $table->integer('views')->default(0);
+            $table->integer('like')->default(0);
+            $table->integer('dislike')->default(0);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('category_id')->references('id')->on('categories');
@@ -38,6 +38,6 @@ class CreateTopicsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('topics');
+        //
     }
 }
