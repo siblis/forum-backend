@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 use App\Comment;
 class CommentsController extends Controller
 {
-    public function getAllPost($topic_id)
+    public function index($topic_id)
     {
-        return 'hello';
-        // return Comments::all()->where('topic_id',$topic_id);
+        // return 'hello';
+        return Comment::all()->where('topic_id',$topic_id);
     }
 
     public function create(Request $request,$id)
