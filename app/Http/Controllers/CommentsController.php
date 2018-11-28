@@ -15,22 +15,15 @@ class CommentsController extends Controller
     public function create(Request $request,$id)
     {
         // id,user_id,topic_id,content
-        $data = Comment::validate($request->all());
-        $comment = Comment::create([
-            'user_id' => $data['user_id'],
-            'topic_id' => $id,
-            'content' => $data['content']
-        ]);
-        return $comment->all()->last();
+        $data = value_validation($request->all());
+        return Comment::create($data);
     }
 
     public function update(Request $request,$id)
     {
         $comment = Comment::find($id);
-        if (isset($request['content'])) {
-            $request['content'] = strip_tags($request['content']);
-        }
-        $comment->update($request->all());
+        $data = value_validation($request->all());
+        $comment->update($data);
         return $comment;
     }
 

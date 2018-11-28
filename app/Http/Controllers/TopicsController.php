@@ -18,13 +18,15 @@ class TopicsController extends Controller
 
     public function create(Request $request)
     {
-            return Topic::create($request->all());
+        $data = value_validation($request->all());
+        return Topic::create($data);
     }
 
     public function update(Request $request, $id)
     {
         $topic = Topic::find($id);
-        $topic->update($request->all());
+        $data = value_validation($request->all());
+        $topic->update($data);
         return $topic;
     }
 
