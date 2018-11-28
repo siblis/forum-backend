@@ -18,9 +18,25 @@ class CommentsController extends Controller
         $data = Comment::validate($request->all());
         $comment = Comment::create([
             'user_id' => $data['user_id'],
-            'topic_id' => $data['topic_id'],
+            'topic_id' => $id,
             'content' => $data['content']
         ]);
-        return $comment->all()->first();
+        return $comment->all()->last();
+    }
+
+    public function update(Request $request,$id)
+    {
+        $comment = Comment::find($id);
+        if (isset($request['content'])) {
+            $request['content'] = strip_tags($request['content']);
+        }
+        $comment->update($request->all());
+        return $comment;
+    }
+
+    public function delete($id)
+    {
+        $comment = Comment::find($id);
+        $comment->delete();
     }
 }

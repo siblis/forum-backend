@@ -14,7 +14,6 @@ class Comment extends Model
     public static function validate($data)
     {
         $dataOut['user_id'] = (isset($data['user_id']))?(int)$data['user_id']:false;
-        $dataOut['topic_id'] = (isset($data['topic_id']))?(int)$data['topic_id']:false;
         $dataOut['content'] = (isset($data['content']))?strip_tags($data['content']):false;
         foreach($dataOut as $elem) {
             if (!$elem) {
