@@ -8,7 +8,7 @@ class TopicsController extends Controller
 {
     public function index($id)
     {
-        return Topic::all()->where('category_id',$id);
+        return Topic::all()->where('categories_id',$id);
     }
 
     public function getOne($id)

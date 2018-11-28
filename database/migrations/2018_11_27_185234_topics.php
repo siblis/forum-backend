@@ -15,7 +15,7 @@ class Topics extends Migration
     {
         Schema::create('topics', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('category_id');
+            $table->integer('categories_id');
             $table->integer('user_id');
             $table->integer('tag_id');
             $table->string('title');
