@@ -2,24 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Comment;
+use Illuminate\Http\Request;
+
 class CommentsController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index($topic_id)
     {
-        // return 'hello';
         return Comment::all()->where('topic_id',$topic_id);
     }
 
-    public function create(Request $request,$id)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
-        // id,user_id,topic_id,content
         $data = value_validation($request->all());
         return Comment::create($data);
     }
 
-    public function update(Request $request,$id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Comment  $comment
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
     {
         $comment = Comment::find($id);
         $data = value_validation($request->all());
@@ -27,9 +44,16 @@ class CommentsController extends Controller
         return $comment;
     }
 
-    public function delete($id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Comment  $comment
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
     {
         $comment = Comment::find($id);
         $comment->delete();
+        return $comment;
     }
 }

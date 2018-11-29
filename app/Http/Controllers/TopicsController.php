@@ -2,26 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Topic;
+use Illuminate\Http\Request;
+
 class TopicsController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index($id)
     {
         return Topic::all()->where('categories_id',$id);
     }
 
-    public function getOne($id)
-    {
-        return Topic::find($id);
-    }
-
-    public function create(Request $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
         $data = value_validation($request->all());
         return Topic::create($data);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Topic  $topic
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return Topic::find($id);
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Topic  $topic
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
         $topic = Topic::find($id);
@@ -30,10 +56,16 @@ class TopicsController extends Controller
         return $topic;
     }
 
-    public function delete($id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Topic  $topic
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
     {
         $topic = Topic::find($id);
         $topic->delete();
-        return 1;
+        return $topic;
     }
 }
