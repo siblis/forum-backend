@@ -14,7 +14,7 @@ class CommentariesSeed extends Seeder
         for ($i=0; $i < 50; $i++) {
             DB::table('comments')->insert([
                 'user_id' => random_int(1,10),
-                'topic_id' => random_int(1,20),
+                'post_id' => random_int(1,20),
                 'content' => str_random(50)
             ]);
         }

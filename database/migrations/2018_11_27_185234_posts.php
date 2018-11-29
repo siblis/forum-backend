@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Topics extends Migration
+class Posts extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class Topics extends Migration
      */
     public function up()
     {
-        Schema::create('topics', function (Blueprint $table) {
+        Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('categories_id');
             $table->integer('user_id');
@@ -26,7 +26,7 @@ class Topics extends Migration
             $table->integer('dislike')->default(0);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('categories_id')->references('id')->on('categories');
             $table->foreign('tag_id')->references('id')->on('tags');
         });
     }

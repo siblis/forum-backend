@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Topic extends Model
+class Post extends Model
 {
     protected $fillable = [
         'category_id',
