@@ -8,11 +8,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/posts/{id}', 'PostsController@index');
-Route::get('/post/{id}', 'PostsController@show');
-Route::post('posts', 'PostsController@store');
-Route::put('/posts/{id}', 'PostsController@update');
-Route::delete('/posts/{id}', 'PostsController@destroy');
+Route::get('/posts', 'PostsController@index');
+Route::get('/post/{post}', 'PostsController@show');
+Route::post('/posts', 'PostsController@store');
+Route::put('/posts/{post}', 'PostsController@update');
+Route::delete('/posts/{post}', 'PostsController@delete');
 
 Route::get('/comments/{id}', 'CommentsController@index');
 Route::post('/comments/{id}', 'CommentsController@store');
