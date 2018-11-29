@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Comment;
+use App\Post;
 use Illuminate\Http\Request;
 
-class CommentsController extends Controller
+class PostsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($topic_id)
+    public function index($id)
     {
-        return Comment::all()->where('topic_id',$topic_id);
+        return Post::all()->where('categories_id',$id);
     }
 
     /**
@@ -26,34 +26,46 @@ class CommentsController extends Controller
     public function store(Request $request)
     {
         $data = value_validation($request->all());
-        return Comment::create($data);
+        return Post::create($data);
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return Post::find($id);
+    }
+
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Comment  $comment
+     * @param  \App\post  $post
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $comment = Comment::find($id);
+        $post = Post::find($id);
         $data = value_validation($request->all());
-        $comment->update($data);
-        return $comment;
+        $post->update($data);
+        return $post;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Comment  $comment
+     * @param  \App\post  $post
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $comment = Comment::find($id);
-        $comment->delete();
-        return $comment;
+        $post = Post::find($id);
+        $post->delete();
+        return $post;
     }
 }

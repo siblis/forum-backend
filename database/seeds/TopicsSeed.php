@@ -12,8 +12,8 @@ class TopicsSeed extends Seeder
     public function run()
     {
         for ($i=0; $i < 20; $i++) {
-            DB::table('topics')->insert([
-                'category_id' => random_int(1,5),
+            DB::table('posts')->insert([
+                'categories_id' => random_int(1,5),
                 'user_id' => random_int(1,10),
                 'tag_id' => 1,
                 'title' => str_random(10),
