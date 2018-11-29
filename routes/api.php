@@ -19,11 +19,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/topics/{id}', 'TopicsController@index');
-Route::get('/topic/{id}', 'TopicsController@show');
-Route::post('topics', 'TopicsController@store');
-Route::put('/topics/{id}', 'TopicsController@update');
-Route::delete('/topics/{id}', 'TopicsController@destroy');
+Route::get('/posts/{id}', 'PostsController@index');
+Route::get('/post/{id}', 'PostsController@show');
+Route::post('posts', 'PostsController@store');
+Route::put('/posts/{id}', 'PostsController@update');
+Route::delete('/posts/{id}', 'PostsController@destroy');
 
 Route::get('/comments/{id}', 'CommentsController@index');
 Route::post('/comments/{id}', 'CommentsController@store');

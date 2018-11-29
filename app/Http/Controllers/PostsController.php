@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Topic;
+use App\Post;
 use Illuminate\Http\Request;
 
-class TopicsController extends Controller
+class PostsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class TopicsController extends Controller
      */
     public function index($id)
     {
-        return Topic::all()->where('categories_id',$id);
+        return Post::all()->where('categories_id',$id);
     }
 
     /**
@@ -26,18 +26,18 @@ class TopicsController extends Controller
     public function store(Request $request)
     {
         $data = value_validation($request->all());
-        return Topic::create($data);
+        return Post::create($data);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Topic  $topic
+     * @param  \App\post  $post
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        return Topic::find($id);
+        return Post::find($id);
     }
 
 
@@ -45,27 +45,27 @@ class TopicsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Topic  $topic
+     * @param  \App\post  $post
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $topic = Topic::find($id);
+        $post = Post::find($id);
         $data = value_validation($request->all());
-        $topic->update($data);
-        return $topic;
+        $post->update($data);
+        return $post;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Topic  $topic
+     * @param  \App\post  $post
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $topic = Topic::find($id);
-        $topic->delete();
-        return $topic;
+        $post = Post::find($id);
+        $post->delete();
+        return $post;
     }
 }
