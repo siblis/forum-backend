@@ -2,70 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\Post;
 use Illuminate\Http\Request;
-
+use App\Post;
 class PostsController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return Post[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function index($id)
+    public function index()
     {
-        return Post::all()->where('categories_id',$id);
+        return Post::all();
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Post $post
+     * @return Post
      */
-    public function store(Request $request)
+    public function show(Post $post)
     {
-        $data = value_validation($request->all());
-        return Post::create($data);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        return Post::find($id);
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $post = Post::find($id);
-        $data = value_validation($request->all());
-        $post->update($data);
         return $post;
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\post  $post
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function destroy($id)
+    public function store (Request $request)
     {
-        $post = Post::find($id);
+        $this->validate($request,[
+           'user_id'=>'required',
+            'category_id'=>'required',
+            'title'=>'required',
+            'content'=>'required'
+        ]);
+        $post = Post::create($request->all());
+        return response()->json($post,201);
+    }
+
+    /**
+     * @param Request $request
+     * @param Post $post
+     * @return Post|\Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function update(Request $request, Post $post)
+    {
+        if (time()<=strtotime($post->created_at)+3600) {
+            $this->validate($request,[
+                'title'=>'required',
+                'content'=>'required'
+            ]);
+            $post->update($request->all());
+            return response()->json($post,200);
+        }
+        return $post;
+    }
+
+    /**
+     * @param Post $post
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function delete(Post $post)
+    {
         $post->delete();
-        return $post;
+        return response()->json(null, 204);
     }
 }
+
