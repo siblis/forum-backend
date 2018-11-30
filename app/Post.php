@@ -43,6 +43,7 @@ class Post extends Model
         'description',
         'content'
     ];
+    public $timestamps = true;
 
     public static function create($request) {
         $post = new Post();
