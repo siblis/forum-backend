@@ -20,6 +20,9 @@ class PostsController extends Controller
      */
     public function show(Post $post)
     {
+        $post->views++;
+        $post->timestamps=false;
+        $post->save();
         return $post;
     }
 
