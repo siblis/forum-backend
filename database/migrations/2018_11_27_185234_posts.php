@@ -26,7 +26,7 @@ class Posts extends Migration
             $table->integer('dislike')->default(0);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('categories_id')->references('id')->on('categories');
+            $table->foreign('category_id')->references('id')->on('categories');
             $table->foreign('tag_id')->references('id')->on('tags');
         });
     }
