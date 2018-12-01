@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Categories;
+use App\Post;
 use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
@@ -18,7 +19,9 @@ class CategoriesController extends Controller
 
     public function show(Categories $category)
     {
-        return $category;
+        $data = $category;
+        $data['posts'] = Post::All()->where('category_id',$category->id);
+        return $data;
     }
 
 //  Метод отправки содержимого форм в БД.
