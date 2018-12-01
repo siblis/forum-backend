@@ -25,9 +25,9 @@ class Posts extends Migration
             $table->integer('like')->default(0);
             $table->integer('dislike')->default(0);
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('category_id')->references('id')->on('categories');
-            $table->foreign('tag_id')->references('id')->on('tags');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null')->onUpdate('cascade');
+            $table->foreign('tag_id')->references('id')->on('tags')->onDelete('set null')->onUpdate('cascade');
         });
     }
 

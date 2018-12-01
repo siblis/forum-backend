@@ -25,7 +25,7 @@ class UsersInfo extends Migration
             $table->integer('rule');
             $table->timestamp('email_verified')->nullable();
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
         });
     }
 

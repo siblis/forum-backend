@@ -19,7 +19,7 @@ class PasswordReset extends Migration
             $table->string('email');
             $table->string('token');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
         });
     }
 

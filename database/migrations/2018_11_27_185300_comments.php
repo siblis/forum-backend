@@ -21,8 +21,8 @@ class Comments extends Migration
             $table->integer('like')->default(0);
             $table->integer('dislike')->default(0);
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('post_id')->references('id')->on('posts');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('set null')->onUpdate('cascade');
         });
     }
 
