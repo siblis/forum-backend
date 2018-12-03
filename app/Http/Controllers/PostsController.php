@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use App\Comment;
 class PostsController extends Controller
 {
     /**
@@ -20,6 +21,11 @@ class PostsController extends Controller
      */
     public function show(Post $post)
     {
+        $post->views++;
+        $post->timestamps=false;
+        $post->save();
+        $data = $post;
+        $data['comments'] = Comment::All()->where('post_id',$post->id);
         return $post;
     }
 
@@ -31,7 +37,7 @@ class PostsController extends Controller
     public function store (Request $request)
     {
         $this->validate($request,[
-           'user_id'=>'required',
+            'user_id'=>'required',
             'category_id'=>'required',
             'title'=>'required',
             'content'=>'required'
