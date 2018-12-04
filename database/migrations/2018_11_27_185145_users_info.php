@@ -14,8 +14,7 @@ class UsersInfo extends Migration
     public function up()
     {
         Schema::create('users_info', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('id');
             $table->string('avatar')->nullable();
             $table->string('full_name')->nullable();
             $table->string('phone')->nullable();
@@ -25,7 +24,7 @@ class UsersInfo extends Migration
             $table->integer('rule');
             $table->timestamp('email_verified')->nullable();
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
