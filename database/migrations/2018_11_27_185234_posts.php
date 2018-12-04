@@ -17,7 +17,6 @@ class Posts extends Migration
             $table->increments('id');
             $table->integer('category_id');
             $table->integer('user_id');
-            //$table->integer('tag_id');
             $table->string('title');
             $table->string('description');
             $table->text('content');
@@ -27,7 +26,6 @@ class Posts extends Migration
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
-            //$table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

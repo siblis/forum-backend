@@ -24,8 +24,6 @@ class PostsController extends Controller
         $post->views++;
         $post->timestamps=false;
         $post->save();
-        //$data = $post;
-        //$data['comments'] = Comment::All()->where('post_id',$post->id);
         return $post;
     }
 
