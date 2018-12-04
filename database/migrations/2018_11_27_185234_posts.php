@@ -17,6 +17,10 @@ class Posts extends Migration
             $table->increments('id');
             $table->integer('category_id');
             $table->integer('user_id');
+<<<<<<< HEAD
+=======
+            //$table->integer('tag_id');
+>>>>>>> поправил миграцию Posts (убрал поле tag_id и ключ к нему), поправил модель и контроллер Post (включил жадную загрузку комментов)
             $table->string('title');
             $table->string('description');
             $table->text('content');
@@ -26,6 +30,10 @@ class Posts extends Migration
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
+<<<<<<< HEAD
+=======
+            //$table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade')->onUpdate('cascade');
+>>>>>>> поправил миграцию Posts (убрал поле tag_id и ключ к нему), поправил модель и контроллер Post (включил жадную загрузку комментов)
         });
     }
 
