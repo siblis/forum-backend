@@ -38,29 +38,15 @@ Route::delete('/tags/{tag}', 'TagsController@destroy');
 //Маршруты для Пользователя
 Route::get('/users', 'UsersController@index');
 Route::get('/users/{user}','UsersController@show');
-Route::get('users/create', 'UsersController@create');
 Route::post('/users', 'UsersController@store');
 Route::put('/users/{user}', 'UsersController@update');
-Route::get('users/{user}/edit', 'UsersController@edit');
 Route::delete('/users/{user}', 'UsersController@destroy');
 
 //В фаиле api.php указываеются роуты именно для создание api приложения.
-//полный адресс будет выглядить примерно так mysait.com/api/post или mysait.com/api/user 
-//Посты
-Route::get('/post/{id?}', 'TopicsController@getPost'); //Возвращает все посты или по id. знак ? означает необязательный параметр
-Route::post('/post', 'TopicsController@addPost');  //Добавляет посты. Возвращает ?
-Route::put('/post/{id}', 'TopicsController@editPost'); //Редактирование поста по id. Возвращает ?
-Route::delete('/post/{id}', 'TopicsController@delPost'); //Удаление поста по id. Возвращает 1 или 0
-
-//Комментарии
-Route::get('/comment/{id?}', 'CommentController@getComment'); // Возвращает комментарии все или по id
-Route::post('/comment', 'CommentController@addComment'); //Добавление комментари.
-Route::put('/comment/{id}', 'CommentController@editComment'); //Редактирование комментария.
-Route::delete('/comment/{id}', 'CommentController@delComment'); //Удаляет комментарий. Возвращает 1 или 0
-
+//полный адресс будет выглядить примерно так mysait.com/api/post или mysait.com/api/user
 
 //Юзвери
-Route::get('/user/info/{id}', 'UserS@getUser'); // Возвращает данные о пользователе по id. 
+Route::get('/user/info/{id}', 'UserS@getUser'); // Возвращает данные о пользователе по id.
 Route::get('/user/auth', 'UserS@authUser'); //Авторизация пользователя. Возвращает 1 или 0, и ид пользователя (?)
 Route::post('/user', 'UserS@addUser'); //регистрация юзера. Возвращает 1 или 0
 Route::put('/user/{id}', 'UserS@editUser'); //Редактирование юзера по id. Возвращает 1 или 0
