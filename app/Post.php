@@ -44,12 +44,20 @@ class Post extends Model
         'content'
     ];
     public $timestamps = true;
+    protected $with=['comments'];
 
     public static function create($request) {
         $post = new Post();
         $post->fill($request);
         $post->save();
         return $post;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments() {
+        return $this->hasMany('App\Comment');
     }
 }
 
