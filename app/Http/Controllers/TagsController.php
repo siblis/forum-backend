@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Tags;
+use App\Tag;
 use Illuminate\Http\Request;
 
 class TagsController extends Controller
@@ -11,12 +11,12 @@ class TagsController extends Controller
 
     public function index()
     {
-        return Tags::all();
+        return Tag::all();
     }
 
 //  Метод вывода конкретнго Тэга.
 
-    public function show(Tags $tag)
+    public function show(Tag $tag)
     {
         return $tag;
     }
@@ -27,12 +27,12 @@ class TagsController extends Controller
     {
         request()->validate(['name' => 'required']);
 
-        return Tags::create(request(['name']));
+        return Tag::create(request(['name']));
     }
 
 //  Метод сохранения изменений Тэга.
 
-    public function update(Tags $tag)
+    public function update(Tag $tag)
     {
         $tag->update(request()->all());
 
@@ -43,7 +43,7 @@ class TagsController extends Controller
 
     public function destroy($id) {
 
-        Tags::findOrFail($id)->delete();
+        Tag::findOrFail($id)->delete();
 
         return 204;
     }
