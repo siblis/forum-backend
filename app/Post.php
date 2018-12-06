@@ -64,11 +64,18 @@ class Post extends Model
         return $this->hasMany('App\Comment','post_id','id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
     public function tags() {
         return $this->hasManyThrough('App\Tag','App\PostTags','post_id','id',
             'id','tag_id')->select('name');
     }
 
+    /**
+     * @param array $options
+     * @return bool|void
+     */
     public function save(array $options = [])
     {
         parent::save($options);
@@ -78,18 +85,16 @@ class Post extends Model
             $newTags=array_diff($this->tags_array,$oldTags);
             $deleteTags=array_diff($oldTags,$this->tags_array);
             $this->addTags($newTags);
+            $this->deleteTags($deleteTags);
         } else {
             PostTags::query()->where('post_id',$this->id)->delete();
         }
     }
 
-    public function saveTags() {
-
-    }
     /**
      * @param $newTags array
      */
-    public function addTags($newTags) {
+    private function addTags($newTags) {
         foreach ($newTags as $newTag) {
             if(!$tag = Tag::query()->where(['name'=>$newTag])->first()) {
                 $tag = new Tag();
@@ -108,7 +113,10 @@ class Post extends Model
         }
     }
 
-    public function deleteTags($deleteTags) {
+    /**
+     * @param $deleteTags array
+     */
+    private function deleteTags($deleteTags) {
         foreach ($deleteTags as $deleteTag) {
             PostTags::query()->where(['tag_id'=>Tag::where(['name'=>$deleteTag])->value('id'),
                 'post_id'=>$this->id])->delete();
