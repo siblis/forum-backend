@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
-use App\Comment;
 class PostsController extends Controller
 {
     /**
@@ -23,6 +22,7 @@ class PostsController extends Controller
     {
         $post->views++;
         $post->timestamps=false;
+        $post->tags_array=[];
         $post->save();
         return $post;
     }
