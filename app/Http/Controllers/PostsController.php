@@ -24,11 +24,6 @@ class PostsController extends Controller
         $post->views++;
         $post->timestamps=false;
         $post->save();
-<<<<<<< HEAD
-=======
-        //$data = $post;
-        //$data['comments'] = Comment::All()->where('post_id',$post->id);
->>>>>>> поправил миграцию Posts (убрал поле tag_id и ключ к нему), поправил модель и контроллер Post (включил жадную загрузку комментов)
         return $post;
     }
 
