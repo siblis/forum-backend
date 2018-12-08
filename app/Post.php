@@ -58,7 +58,7 @@ class Post extends Model
     }
 
     public function username() {
-        return $this->hasOne("App\User",'id','user_id')->select(['id','username']);
+        return $this->hasOne("App\User",'id','user_id')->select(['id','name']);
     }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

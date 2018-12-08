@@ -14,6 +14,6 @@ class Comment extends Model
     protected $with=['username'];
 
     public function username() {
-        return $this->hasOne("App\User",'id','user_id')->select(['id','username']);
+        return $this->hasOne("App\User",'id','user_id')->select(['id','name']);
     }
 }
