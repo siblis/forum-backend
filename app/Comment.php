@@ -11,4 +11,9 @@ class Comment extends Model
         'post_id',
         'content'
     ];
+    protected $with=['username'];
+
+    public function username() {
+        return $this->hasOne("App\User",'id','user_id')->select(['id','username']);
+    }
 }

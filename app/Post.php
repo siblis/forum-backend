@@ -47,7 +47,7 @@ class Post extends Model
         'tags_array'
     ];
     public $timestamps = true;
-    protected $with=['comments','tags'];
+    protected $with=['username','comments','tags',];
     public $tags_array;
 
     public static function create($request) {
@@ -57,6 +57,9 @@ class Post extends Model
         return $post;
     }
 
+    public function username() {
+        return $this->hasOne("App\User",'id','user_id')->select(['id','username']);
+    }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
