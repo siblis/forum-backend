@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
-use App\Comment;
 class PostsController extends Controller
 {
     /**
@@ -23,9 +22,8 @@ class PostsController extends Controller
     {
         $post->views++;
         $post->timestamps=false;
+        $post->tags_array=[];
         $post->save();
-        $data = $post;
-        $data['comments'] = Comment::All()->where('post_id',$post->id);
         return $post;
     }
 
