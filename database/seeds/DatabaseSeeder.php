@@ -11,6 +11,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('tags')->insert(['name'=>'tags']);
+        $this->call(UserSeed::class);
+        $this->call(CategoriesSeed::class);
+        $this->call(TopicsSeed::class);
+        $this->call(CommentariesSeed::class);
         // $this->call(UsersTableSeeder::class);
     }
 }
