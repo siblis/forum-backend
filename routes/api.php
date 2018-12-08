@@ -35,14 +35,6 @@ Route::post('/tags', 'TagsController@store');
 Route::patch('/tags/{tag}', 'TagsController@update');
 Route::get('tags/{tag}/edit','TagsController@edit');
 Route::delete('/tags/{tag}', 'TagsController@destroy');
-//Маршруты для Пользователя
-Route::get('/users', 'UsersController@index');
-Route::get('/users/{user}','UsersController@show');
-Route::get('users/create', 'UsersController@create');
-Route::post('/users', 'UsersController@store');
-Route::put('/users/{user}', 'UsersController@update');
-Route::get('users/{user}/edit', 'UsersController@edit');
-Route::delete('/users/{user}', 'UsersController@destroy');
 
 //В фаиле api.php указываеются роуты именно для создание api приложения.
 //полный адресс будет выглядить примерно так mysait.com/api/post или mysait.com/api/user 
@@ -59,12 +51,24 @@ Route::put('/comment/{id}', 'CommentController@editComment'); //Редактир
 Route::delete('/comment/{id}', 'CommentController@delComment'); //Удаляет комментарий. Возвращает 1 или 0
 
 
-//Юзвери
-Route::get('/user/info/{id}', 'UserS@getUser'); // Возвращает данные о пользователе по id. 
-Route::get('/user/auth', 'UserS@authUser'); //Авторизация пользователя. Возвращает 1 или 0, и ид пользователя (?)
-Route::post('/user', 'UserS@addUser'); //регистрация юзера. Возвращает 1 или 0
-Route::put('/user/{id}', 'UserS@editUser'); //Редактирование юзера по id. Возвращает 1 или 0
-Route::delete('/user/{id}', 'UserS@delUser'); //Удаление юзера по id. Возвращает 1 или 0
+//Маршруты для Пользователя
+Route::group([
 
+    'middleware' => ['api','cors'],
+    'prefix' => 'users'
+
+], function ($router) {
+
+    Route::post('login', 'AuthController@login'); //Авторизация пользователя. Возвращает user и token
+    //Route::post('logout', 'AuthController@logout'); //Выход
+    Route::post('refresh', 'AuthController@refresh'); //Обновление токена
+    Route::post('me', 'AuthController@me'); // Получение авторизованного пользователя. Возвращает user
+    Route::post('register', 'AuthController@register'); //Регистрация пользователя. Возвращает user, token, статус 201
+});
+
+//Маршруты для Профиля
+Route::get('/users/{id}/info', 'ProfileController@getProfile'); // Возвращает данные о профиле пользователя по id.
+Route::put('/users/{id}', 'ProfileController@editProfile'); //Редактирование профиля пользователя по id. Возвращает 1 или 0
+Route::delete('/users/{id}', 'ProfileController@delProfile'); //Удаление профиля пользователя по id. Возвращает 1 или 0
 
 //Правда я еще не понимаю как они на вю сделают работу с сессиями. ))
