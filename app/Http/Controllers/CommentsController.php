@@ -12,9 +12,9 @@ class CommentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($topic_id)
+    public function index($post_id)
     {
-        return Comment::all()->where('topic_id',$topic_id);
+        return Comment::all()->where('post_id',$post_id);
     }
 
     /**
@@ -26,7 +26,7 @@ class CommentsController extends Controller
     public function store(Request $request)
     {
         $data = value_validation($request->all());
-        return Comment::create($data);
+        return response()->json(Comment::create($data),201);
     }
 
     /**
@@ -41,7 +41,7 @@ class CommentsController extends Controller
         $comment = Comment::find($id);
         $data = value_validation($request->all());
         $comment->update($data);
-        return $comment;
+        return response()->json($comment,200);
     }
 
     /**
@@ -54,6 +54,6 @@ class CommentsController extends Controller
     {
         $comment = Comment::find($id);
         $comment->delete();
-        return $comment;
+        return response()->noContent(204);
     }
 }

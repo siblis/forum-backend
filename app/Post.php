@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Tag;
+use App\PostTags;
 
 /**
  * App\Post
@@ -41,10 +43,12 @@ class Post extends Model
         'user_id',
         'title',
         'description',
-        'content'
+        'content',
+        'tags_array'
     ];
     public $timestamps = true;
-    protected $with=['comments'];
+    protected $with=['username','comments','tags',];
+    public $tags_array;
 
     public static function create($request) {
         $post = new Post();
@@ -53,11 +57,75 @@ class Post extends Model
         return $post;
     }
 
+    public function username() {
+        return $this->hasOne("App\User",'id','user_id')->select(['id','name']);
+    }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function comments() {
-        return $this->hasMany('App\Comment');
+        return $this->hasMany('App\Comment','post_id','id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function tags() {
+        return $this->hasManyThrough('App\Tag','App\PostTags','post_id','id',
+            'id','tag_id')->select('name');
+    }
+
+    /**
+     * @param array $options
+     * @return bool|void
+     */
+    public function save(array $options = [])
+    {
+        parent::save($options);
+
+        if (is_array($this->tags_array)) {
+            $oldTags=array_pluck($this->tags,'name','name');
+            $newTags=array_diff($this->tags_array,$oldTags);
+            $deleteTags=array_diff($oldTags,$this->tags_array);
+            $this->addTags($newTags);
+            $this->deleteTags($deleteTags);
+        } else {
+            PostTags::query()->where('post_id',$this->id)->delete();
+        }
+    }
+
+    /**
+     * @param $newTags array
+     */
+    private function addTags($newTags) {
+        foreach ($newTags as $newTag) {
+            if(!$tag = Tag::query()->where(['name'=>$newTag])->first()) {
+                $tag = new Tag();
+                $tag->name=$newTag;
+                if ($tag->save()) {
+                    $tag = null;
+                }
+            }
+            if ($tag instanceof Tag) {
+                $pt = new PostTags();
+                $pt->tag_id=$tag->id;
+                $pt->post_id=$this->id;
+                $pt->save();
+
+            }
+        }
+    }
+
+    /**
+     * @param $deleteTags array
+     */
+    private function deleteTags($deleteTags) {
+        foreach ($deleteTags as $deleteTag) {
+            PostTags::query()->where(['tag_id'=>Tag::where(['name'=>$deleteTag])->value('id'),
+                'post_id'=>$this->id])->delete();
+        }
+        /*return PostTags::query()->where(['tag_id'=>Tag::where(['name'=>$deleteTag])->value('id'),
+                'post_id'=>$this->id]);*/
     }
 }
 
