@@ -25,3 +25,7 @@ Route::get('/csrd', function(){
     return response()->json(Session::token());
 });
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
