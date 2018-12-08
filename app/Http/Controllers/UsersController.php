@@ -11,14 +11,14 @@ class UsersController extends Controller
 
     public function index()
     {
-        return Users::all();
+        return response()->json(Users::all(),200);
     }
 
 //  Метод вывода конкретного Пользователя.
 
     public function show(Users $user)
     {
-        return $user;
+        return response()->json($user,200);
     }
 
 //  Метод отправки содержимого форм в БД.
@@ -30,8 +30,8 @@ class UsersController extends Controller
             'user_email' => 'required',
             'password' => 'required',
         ]);
-
-       return Users::create(request(['username', 'user_email', 'password']));
+        $data = Users::create(request(['username', 'user_email', 'password']));
+       return response()->json($data,201);
     }
 
 //  Метод сохранения изменений Пользователей.
@@ -49,6 +49,6 @@ class UsersController extends Controller
 
         Users::findOrFail($id)->delete();
 
-        return 204;
+        return response()->noContent(204);
     }
 }

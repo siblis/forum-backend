@@ -18,7 +18,7 @@ class TagsController extends Controller
 
     public function show(Tag $tag)
     {
-        return $tag;
+        return response()->json($tag,200);
     }
 
 //  Метод отправки содержимого форм в БД.
@@ -27,7 +27,7 @@ class TagsController extends Controller
     {
         request()->validate(['name' => 'required']);
 
-        return Tag::create(request(['name']));
+        return response()->json(Tag::create(request(['name'])),201);
     }
 
 //  Метод сохранения изменений Тэга.
@@ -45,7 +45,7 @@ class TagsController extends Controller
 
         Tag::findOrFail($id)->delete();
 
-        return 204;
+        return response()->noContent(204);
     }
 
 }
