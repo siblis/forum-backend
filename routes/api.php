@@ -31,12 +31,21 @@ Route::get('/tags/{tag}','TagsController@show');
 Route::post('/tags', 'TagsController@store');
 Route::patch('/tags/{tag}', 'TagsController@update');
 Route::delete('/tags/{tag}', 'TagsController@destroy');
+
 //Маршруты для Пользователя
-Route::get('/users', 'UsersController@index');
-Route::get('/users/{user}','UsersController@show');
-Route::post('/users', 'UsersController@store');
-Route::put('/users/{user}', 'UsersController@update');
-Route::delete('/users/{user}', 'UsersController@destroy');
+Route::group([
+
+    'middleware' => ['api','cors'],
+    'prefix' => 'users'
+
+], function ($router) {
+
+    Route::post('login', 'AuthController@login'); //Авторизация пользователя. Возвращает user и token
+    //Route::post('logout', 'AuthController@logout'); //Выход
+    Route::post('refresh', 'AuthController@refresh'); //Обновление токена
+    Route::post('me', 'AuthController@me'); // Получение авторизованного пользователя. Возвращает user
+    Route::post('register', 'AuthController@register'); //Регистрация пользователя. Возвращает user, token, статус 201
+});
 
 //В фаиле api.php указываеются роуты именно для создание api приложения.
 //полный адресс будет выглядить примерно так mysait.com/api/post или mysait.com/api/user
