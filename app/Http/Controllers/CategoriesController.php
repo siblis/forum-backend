@@ -35,7 +35,8 @@ class CategoriesController extends Controller
             'description' => 'required'
         ]);
 
-        return Categories::create(request(['name', 'status', 'description', 'avatar']));
+        $category = Categories::create(request(['name', 'status', 'description', 'avatar']));
+        return response()->json($category, 201);
     }
 
 //  Метод сохранения изменений в Категории.
