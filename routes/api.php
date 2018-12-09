@@ -40,7 +40,7 @@ Route::group(['middleware' => ['jwt.verify']], function(){
     Route::put('/posts/{post}', 'PostsController@update');
     Route::delete('/posts/{post}', 'PostsController@delete');
     //роуты для комментариев
-    Route::post('/comments/{id}', 'CommentsController@store');
+    Route::post('/comments', 'CommentsController@store');
     Route::put('/comments/{id}', 'CommentsController@update');
     Route::delete('/comments/{id}', 'CommentsController@destroy');
     //роуты для тегов
