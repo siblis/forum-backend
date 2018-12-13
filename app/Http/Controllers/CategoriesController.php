@@ -12,7 +12,7 @@ class CategoriesController extends Controller
 
     public function index()
     {
-        return Categories::all();
+        return response()->json(Categories::all(),200);
     }
 
 //  Метод вывода конкретной Категории.
@@ -21,7 +21,7 @@ class CategoriesController extends Controller
     {
         $data = $category;
         $data['posts'] = Post::All()->where('category_id',$category->id);
-        return $data;
+        return response()->json($data,200);
     }
 
 //  Метод отправки содержимого форм в БД.
@@ -35,7 +35,8 @@ class CategoriesController extends Controller
             'description' => 'required'
         ]);
 
-        return Categories::create(request(['name', 'status', 'description', 'avatar']));
+        $category = Categories::create(request(['name', 'status', 'description', 'avatar']));
+        return response()->json($category, 201);
     }
 
 //  Метод сохранения изменений в Категории.
@@ -53,7 +54,7 @@ class CategoriesController extends Controller
     {
         Categories::findOrFail($id)->delete();
 
-        return 204;
+        return response()->noContent(204);
     }
 }
 

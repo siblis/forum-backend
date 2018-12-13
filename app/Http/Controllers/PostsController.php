@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Post;
 class PostsController extends Controller
@@ -11,7 +12,8 @@ class PostsController extends Controller
      */
     public function index()
     {
-        return Post::all();
+        $posts = Post::paginate(15);
+        return response()->json($posts, 200);
     }
 
     /**
@@ -24,7 +26,9 @@ class PostsController extends Controller
         $post->timestamps=false;
         $post->tags_array=[];
         $post->save();
-        return $post;
+        $data = $post;
+        $data['comments'] = DB::table('comments')->where('post_id',$post->id)->paginate(10);
+        return response()->json($post, 200);
     }
 
     /**

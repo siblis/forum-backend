@@ -13,8 +13,8 @@ class UserSeed extends Seeder
     {
         for ($i=0; $i < 10; $i++) {
             DB::table('users')->insert([
-                'username' => str_random(10),
-                'user_email' => str_random(10).'@mail.ru',
+                'name' => str_random(10),
+                'email' => str_random(10).'@mail.ru',
                 'password' => bcrypt('123456')
             ]);
         }
