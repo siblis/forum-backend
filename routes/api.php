@@ -11,23 +11,22 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //todo разобраться с cors
 //todo разобраться с методами put delete
 
-Route::group(['middleware' => ['cors']], function () {
+
 //Маршруты для постов
 Route::get('/posts', 'PostsController@index');
 Route::get('/posts/{post}', 'PostsController@show');
 //Маршруты для комментариев
-    Route::get('/comments/{id}', 'CommentsController@index');
+Route::get('/comments/{id}', 'CommentsController@index');
 //Маршруты для Категорий
-    Route::get('/categories', 'CategoriesController@index');
-    Route::get('/categories/{category}', 'CategoriesController@show');
+Route::get('/categories', 'CategoriesController@index');
+Route::get('/categories/{category}', 'CategoriesController@show');
 //Маршруты для Тегов
-    Route::get('/tags', 'TagsController@index');
-    Route::get('/tags/{tag}', 'TagsController@show');
-});
+Route::get('/tags', 'TagsController@index');
+Route::get('/tags/{tag}', 'TagsController@show');
 
 //Маршруты для Пользователя
 Route::group([
-    'middleware' => ['api', 'cors'],
+    'middleware' => ['not.post', 'api'],
     'prefix' => 'users'
 ], function ($router) {
 
@@ -39,7 +38,7 @@ Route::group([
 });
 
 //
-Route::group(['middleware' => ['jwt.verify','cors']], function () {
+Route::group(['middleware' => ['not.post', 'jwt.verify']], function () {
     //роуты для постов
     Route::post('/posts', 'PostsController@store');
     Route::put('/posts/{post}', 'PostsController@update');
