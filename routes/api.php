@@ -1,28 +1,33 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-header( 'Access-Control-Allow-Headers', 'X-Requested-With, Authorization, Content-Type' );
+#header('Access-Control-Allow-Origin: *');
+#header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+#header( 'Access-Control-Allow-Headers', 'X-Requested-With, Authorization, Content-Type' );
 use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-//Маршруты для постов
-Route::get('/posts', 'PostsController@index');
-Route::get('/post/{post}', 'PostsController@show');
-//Маршруты для комментариев
-Route::get('/comments/{id}', 'CommentsController@index');
-//Маршруты для Категорий
-Route::get('/categories', 'CategoriesController@index');
-Route::get('/categories/{category}','CategoriesController@show');
-//Маршруты для Тегов
-Route::get('/tags','TagsController@index');
-Route::get('/tags/{tag}','TagsController@show');
 
+//todo разобраться с cors
+//todo разобраться с методами put delete
+
+Route::group(['middleware' => ['cors']], function () {
+//Маршруты для постов
+    Route::get('/posts', 'PostsController@index');
+    Route::get('/post/{post}', 'PostsController@show');
+//Маршруты для комментариев
+    Route::get('/comments/{id}', 'CommentsController@index');
+//Маршруты для Категорий
+    Route::get('/categories', 'CategoriesController@index');
+    Route::get('/categories/{category}', 'CategoriesController@show');
+//Маршруты для Тегов
+    Route::get('/tags', 'TagsController@index');
+    Route::get('/tags/{tag}', 'TagsController@show');
+});
 
 //Маршруты для Пользователя
 Route::group([
-    'middleware' => ['api','cors'],
+    'middleware' => ['api', 'cors'],
     'prefix' => 'users'
 ], function ($router) {
 
@@ -34,7 +39,7 @@ Route::group([
 });
 
 //
-Route::group(['middleware' => ['jwt.verify']], function(){
+Route::group(['middleware' => ['jwt.verify','cors']], function () {
     //роуты для постов
     Route::post('/posts', 'PostsController@store');
     Route::put('/posts/{post}', 'PostsController@update');
