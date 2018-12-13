@@ -13,8 +13,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['cors']], function () {
 //Маршруты для постов
-    Route::get('/posts', 'PostsController@index');
-    Route::get('/post/{post}', 'PostsController@show');
+Route::get('/posts', 'PostsController@index');
+Route::get('/posts/{post}', 'PostsController@show');
 //Маршруты для комментариев
     Route::get('/comments/{id}', 'CommentsController@index');
 //Маршруты для Категорий
