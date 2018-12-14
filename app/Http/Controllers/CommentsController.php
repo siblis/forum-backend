@@ -39,9 +39,14 @@ class CommentsController extends Controller
     public function update(Request $request, $id)
     {
         $comment = Comment::find($id);
-        $data = value_validation($request->all());
-        $comment->update($data);
-        return response()->json($comment,200);
+        if (Comment::checkWhoUpdated($comment)) {
+            $data = value_validation($request->all());
+            $comment->update($data);
+            return response()->json($comment,200);
+        } else {
+            return response()->json(['Error' => 'You don\' have rule'], 403);
+        }
+
     }
 
     /**
