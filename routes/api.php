@@ -26,7 +26,7 @@ Route::get('/tags/{tag}', 'TagsController@show');
 
 //Маршруты для Пользователя
 Route::group([
-    'middleware' => ['not.post', 'api'],
+    'middleware' => ['not.post', 'api', 'cors'],
     'prefix' => 'users'
 ], function ($router) {
 
