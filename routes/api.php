@@ -48,7 +48,7 @@ Route::group(['middleware' => ['not.post', 'jwt.verify','user_id']], function ()
 });
 
 //Роуты удаления
-Route::group(['middleware' => ['not.post', 'jwt.verify']], function () {
+Route::group(['middleware' => ['not.post', 'jwt.verify','admin_val']], function () {
     Route::delete('/posts/{post}', 'PostsController@delete');
     Route::delete('/comments/{id}', 'CommentsController@destroy');
     Route::delete('/tags/{tag}', 'TagsController@destroy');

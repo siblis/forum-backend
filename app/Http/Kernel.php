@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,
         'not.post' => \App\Http\Middleware\ParseDataInputForNonPostRequests::class,
         'user_id' => \App\Http\Middleware\GetUserId::class,
+        'admin_val' => \App\Http\Middleware\AdminValidation::class,
         ];
     /**
      * The priority-sorted list of middleware.
