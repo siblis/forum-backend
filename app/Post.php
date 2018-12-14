@@ -44,17 +44,36 @@ class Post extends Model
         'title',
         'description',
         'content',
-        'tags_array'
+        'tags'
     ];
     public $timestamps = true;
-    protected $with=['username','comments','tags',];
-    public $tags_array;
+    protected $with=['username','comments'];
+    protected $appends=['tags'];
+    protected $hidden=['tags_array'];
 
     public static function create($request) {
         $post = new Post();
         $post->fill($request);
         $post->save();
+        $post->saveTags();
         return $post;
+    }
+
+    public function getTagsAttribute() {
+        return array_pluck($this->tags_array,'name','name');
+    }
+
+    public function getOldTagsAttribute() {
+        return array_pluck($this->tags_array,'name','name');
+    }
+
+    public function update(array $attributes = [], array $options = [])
+    {
+        if (parent::update($attributes, $options)) {
+            $this->saveTags();
+            return true;
+        }
+        return false;
     }
 
     public function username() {
@@ -70,23 +89,15 @@ class Post extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
-    public function tags() {
+    protected function tags_array() {
         return $this->hasManyThrough('App\Tag','App\PostTags','post_id','id',
-            'id','tag_id')->select('name');
+            'id','tag_id')->select(['name']);
     }
 
-    /**
-     * @param array $options
-     * @return bool|void
-     */
-    public function save(array $options = [])
-    {
-        parent::save($options);
-
-        if (is_array($this->tags_array)) {
-            $oldTags=array_pluck($this->tags,'name','name');
-            $newTags=array_diff($this->tags_array,$oldTags);
-            $deleteTags=array_diff($oldTags,$this->tags_array);
+    public function saveTags() {
+        if (is_array($this->tags)) {
+            $newTags=array_diff($this->tags,$this->oldTags);
+            $deleteTags=array_diff($this->oldTags,$this->tags);
             $this->addTags($newTags);
             $this->deleteTags($deleteTags);
         } else {
