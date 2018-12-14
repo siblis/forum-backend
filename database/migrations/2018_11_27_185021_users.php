@@ -19,6 +19,7 @@ class Users extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('remember_token')->nullable();
+            $table->string('role')->default('user');
             $table->timestamps();
         });
     }
