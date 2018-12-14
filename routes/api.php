@@ -33,7 +33,7 @@ Route::group([
     Route::post('login', 'AuthController@login'); //Авторизация пользователя. Возвращает user и token
     //Route::post('logout', 'AuthController@logout'); //Выход
     Route::post('refresh', 'AuthController@refresh'); //Обновление токена
-    Route::post('me', 'AuthController@me'); // Получение авторизованного пользователя. Возвращает user
+    Route::get('me', 'AuthController@me'); // Получение авторизованного пользователя. Возвращает user
     Route::post('register', 'AuthController@register'); //Регистрация пользователя. Возвращает user, token, статус 201
 });
 
