@@ -12,7 +12,9 @@ class CategoriesController extends Controller
 
     public function index()
     {
-        return response()->json(Categories::all(),200);
+        $data = Categories::all();
+        $data = Categories::getAmountPosts($data);
+        return response()->json($data,200);
     }
 
 //  Метод вывода конкретной Категории.
@@ -20,7 +22,7 @@ class CategoriesController extends Controller
     public function show(Categories $category)
     {
         $data = $category;
-        $data['posts'] = Post::All()->where('category_id',$category->id);
+        $data['posts'] = Post::All()->where('category_id',$category->id)->count();
         return response()->json($data,200);
     }
 
@@ -30,19 +32,21 @@ class CategoriesController extends Controller
     {
         request()->validate([
             'name' => 'required',
-            'status' => 'required',
             'avatar' => 'required',
             'description' => 'required'
         ]);
 
-        $category = Categories::create(request(['name', 'status', 'description', 'avatar']));
+        $data = value_validation(request(['name', 'description', 'avatar']));
+        $data['status'] = true;//пока заглушка
+
+        $category = Categories::create($data);
         return response()->json($category, 201);
     }
 
 //  Метод сохранения изменений в Категории.
 
     public function update(Categories $category) {
-
+        //todo Добавить валидацию
         $category->update(request()->all());
 
         return response()->json($category,200);

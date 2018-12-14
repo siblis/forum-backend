@@ -27,8 +27,7 @@ class PostsController extends Controller
         $post->views++;
         $post->timestamps = false;
         $post->save();
-        $data = $post;
-        $data['comments'] = DB::table('comments')->where('post_id', $post->id)->paginate(10);
+        $post['comments'] = DB::table('comments')->where('post_id', $post->id)->count();
         return response()->json($post, 200);
     }
 

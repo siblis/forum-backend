@@ -47,7 +47,7 @@ class Post extends Model
         'tags'
     ];
     public $timestamps = true;
-    protected $with=['username','comments'];
+    protected $with=['username'];
     protected $appends=['tags'];
     protected $hidden=['tags_array'];
 
