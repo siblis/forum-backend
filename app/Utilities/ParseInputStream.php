@@ -54,7 +54,7 @@ class ParseInputStream
 
         }elseif($this->getRequestType() == "application/json"){
 
-            $data = json_decode($this->input, true)['data'];
+            $data = json_decode($this->input, true);
 
         }
 
