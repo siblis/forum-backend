@@ -24,7 +24,6 @@ class PostsController extends Controller
     {
         $post->views++;
         $post->timestamps=false;
-        $post->tags_array=[];
         $post->save();
         $data = $post;
         $data['comments'] = DB::table('comments')->where('post_id',$post->id)->paginate(10);
