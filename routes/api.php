@@ -46,7 +46,7 @@ Route::group(['middleware' => ['not.post', 'jwt.verify','user_id']], function ()
     Route::post('/categories', 'CategoriesController@store');
     Route::put('/categories/{category}', 'CategoriesController@update');
 });
-//todo брать данный метод. внести такой же обработчик как для редактирования
+
 //Роуты удаления
 Route::group(['middleware' => ['not.post', 'jwt.verify'/*,'admin_val'*/]], function () {
     Route::delete('/posts/{post}', 'PostsController@delete');

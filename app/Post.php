@@ -138,15 +138,5 @@ class Post extends Model
         /*return PostTags::query()->where(['tag_id'=>Tag::where(['name'=>$deleteTag])->value('id'),
                 'post_id'=>$this->id]);*/
     }
-
-    public static function checkWhoUpdated($post){
-        $user = auth()->user();
-        if ($post['user_id'] == $user['id'] || $user['role'] === 'admin')
-        {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
 

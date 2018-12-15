@@ -6,6 +6,7 @@ use http\Env\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Post;
+use App\Utilities\СheckWhoUpdated;
 
 class PostsController extends Controller
 {
@@ -56,8 +57,7 @@ class PostsController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //todo исправить данный обработчик. Сделать его универсальным для моделей
-        if (Post::checkWhoUpdated($post)) {
+        if (СheckWhoUpdated::check($post['user_id'])) {
             if (time() <= strtotime($post->created_at) + 3600) {
                 $this->validate($request, [
                     'title' => 'required',
@@ -69,7 +69,7 @@ class PostsController extends Controller
                 return response()->json(['Error' => 'Timeout'], 400);
             }
         } else {
-            return response()->json(['Error' => 'You don\' have rule'], 403);
+            return response()->json(['Error' => 'You don\'t have rule'], 403);
         }
     }
 
@@ -80,11 +80,11 @@ class PostsController extends Controller
      */
     public function delete(Post $post)
     {
-        if (Post::checkWhoUpdated($post)) {
+        if (СheckWhoUpdated::check($post['user_id'])) {
             $post->delete();
             return response()->json(null, 204);
         } else {
-            return response()->json(['Error' => 'You don\' have rule'], 403);
+            return response()->json(['Error' => 'You don\'t have rule'], 403);
         }
 
     }
