@@ -56,6 +56,7 @@ class PostsController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        //todo исправить данный обработчик. Сделать его универсальным для моделей
         if (Post::checkWhoUpdated($post)) {
             if (time() <= strtotime($post->created_at) + 3600) {
                 $this->validate($request, [
@@ -79,8 +80,13 @@ class PostsController extends Controller
      */
     public function delete(Post $post)
     {
-        $post->delete();
-        return response()->json(null, 204);
+        if (Post::checkWhoUpdated($post)) {
+            $post->delete();
+            return response()->json(null, 204);
+        } else {
+            return response()->json(['Error' => 'You don\' have rule'], 403);
+        }
+
     }
 }
 
