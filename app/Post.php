@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use App\Tag;
 use App\PostTags;
 
@@ -137,6 +138,36 @@ class Post extends Model
         }
         /*return PostTags::query()->where(['tag_id'=>Tag::where(['name'=>$deleteTag])->value('id'),
                 'post_id'=>$this->id]);*/
+    }
+
+    /**
+     * @return Post[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public static function showAllPosts()
+    {
+        $posts = Post::all()->sortByDesc(['created_at'])->paginate(15);
+        $posts = self::addCommentCount($posts);
+        return response()->json($posts, 200);
+    }
+
+    /**
+     * @return Post[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public static function showBestPosts()
+    {
+        $posts = Post::all('id', 'title');
+        $posts = self::addCommentCount($posts);
+        return $posts->sortByDesc('comments');
+    }
+
+    protected static function addCommentCount($posts)
+    {
+        foreach($posts as $post)
+        {
+            $data = $post;
+            $data['comments'] = DB::table('comments')->where('post_id', $post->id)->count();
+        }
+        return $posts;
     }
 }
 
