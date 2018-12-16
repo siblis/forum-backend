@@ -6,7 +6,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 //Маршрут для поиска
-Route::post('/search', 'SearchController@search');
+Route::get('/search/{keyword}', 'SearchController@search');
 
 //Маршруты для постов
 Route::get('/posts', 'PostsController@index');

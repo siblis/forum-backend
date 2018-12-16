@@ -146,13 +146,7 @@ class Post extends Model
     public static function showAllPosts()
     {
         $posts = Post::all()->sortByDesc(['created_at'])->paginate(15);
-
-        foreach($posts as $post)
-        {
-            $data = $post;
-            $data['comments'] = DB::table('comments')->where('post_id', $post->id)->count();
-        }
-
+        $posts = self::addCommentCount($posts);
         return response()->json($posts, 200);
     }
 
@@ -162,14 +156,18 @@ class Post extends Model
     public static function showBestPosts()
     {
         $posts = Post::all('id', 'title');
+        $posts = self::addCommentCount($posts);
+        return $posts->sortByDesc('comments');
+    }
 
+    protected static function addCommentCount($posts)
+    {
         foreach($posts as $post)
         {
             $data = $post;
             $data['comments'] = DB::table('comments')->where('post_id', $post->id)->count();
         }
-
-        return $posts->sortByDesc('comments');
+        return $posts;
     }
 }
 
