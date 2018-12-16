@@ -13,7 +13,7 @@ Route::get('/posts', 'PostsController@index');
 Route::get('/posts/{post}', 'PostsController@show');
 Route::get('/best-posts', 'PostsController@bestPosts');
 //Маршруты для комментариев
-Route::get('/comments/{id}', 'CommentsController@index');
+Route::get('/posts/{id}/comments', 'CommentsController@index');
 //Маршруты для Категорий
 Route::get('/categories', 'CategoriesController@index');
 Route::get('/categories/{category}', 'CategoriesController@show');
