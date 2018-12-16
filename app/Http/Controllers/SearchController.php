@@ -6,8 +6,8 @@ use App\Search;
 
 class SearchController extends Controller
 {
-    public function search()
+    public function search($keyword)
     {
-        return Search::searchQuery();
+        return Search::searchQuery($keyword);
     }
 }

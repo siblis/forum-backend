@@ -2,14 +2,12 @@
 
 namespace App;
 
-use Illuminate\Support\Facades\Input;
 use Illuminate\Database\Eloquent\Model;
 
 class Search extends Model
 {
-    public static function searchQuery()
+    public static function searchQuery($search)
     {
-        $search = Input::get('search');
 
         if($search !='')
         {
@@ -20,9 +18,9 @@ class Search extends Model
                 ->orWhereRaw('LOWER ("content") LIKE ?', [trim(strtolower($search)) . '%'])
                 ->get(['title', 'content']);
 
-            $users = Users::whereRaw('LOWER ("username") LIKE ?', [trim(strtolower($search)) . '%'])
-                ->orWhereRaw('LOWER ("user_email") LIKE ?', [trim(strtolower($search)) . '%'])
-                ->get(['username', 'user_email']);
+            $users = User::whereRaw('LOWER ("name") LIKE ?', [trim(strtolower($search)) . '%'])
+                ->orWhereRaw('LOWER ("email") LIKE ?', [trim(strtolower($search)) . '%'])
+                ->get(['name', 'email']);
 
             $tags = Tag::whereRaw('LOWER ("name") LIKE ?', [trim(strtolower($search)) . '%'])->get();
 
