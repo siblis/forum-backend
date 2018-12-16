@@ -5,10 +5,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//Маршрут для поиска
+Route::post('/search', 'SearchController@search');
 
 //Маршруты для постов
 Route::get('/posts', 'PostsController@index');
 Route::get('/posts/{post}', 'PostsController@show');
+Route::get('/best-posts', 'PostsController@bestPosts');
 //Маршруты для комментариев
 Route::get('/comments/{id}', 'CommentsController@index');
 //Маршруты для Категорий

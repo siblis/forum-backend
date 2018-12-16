@@ -15,20 +15,23 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(15);
-        return response()->json($posts, 200);
+        return Post::showAllPosts();
+    }
+
+    /**
+     * @return Post[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function bestPosts()
+    {
+        return Post::showBestPosts();
     }
 
     /**
      * @param Post $post
-     * @return Post
+     * @return Post[]|\Illuminate\Database\Eloquent\Collection
      */
     public function show(Post $post)
     {
-        $post->views++;
-        $post->timestamps = false;
-        $post->save();
-        $post['comments'] = DB::table('comments')->where('post_id', $post->id)->count();
         return response()->json($post, 200);
     }
 

@@ -15,7 +15,7 @@ class CommentsController extends Controller
      */
     public function index($post_id)
     {
-        return response()->json(Comment::all()->where('post_id', $post_id),200);
+        return response()->json(Comment::all()->where('post_id', $post_id)->paginate(10),200);
     }
 
     /**
@@ -27,6 +27,14 @@ class CommentsController extends Controller
     public function store(Request $request)
     {
         //todo добавить стандартную валидацию laravel
+
+        request()->validate
+        ([
+            'user_id' => 'required',
+            'post_id' => 'required',
+            'content' => 'required',
+        ]);
+
         $data = value_validation($request->all());
         return response()->json(Comment::create($data), 201);
     }
