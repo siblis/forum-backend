@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use Illuminate\Http\Request;
+use App\Utilities\СheckWhoUpdated;
 
 class CommentsController extends Controller
 {
@@ -14,46 +15,54 @@ class CommentsController extends Controller
      */
     public function index($post_id)
     {
-        return Comment::all()->where('post_id',$post_id);
+        return response()->json(Comment::all()->where('post_id', $post_id),200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
+        //todo добавить стандартную валидацию laravel
         $data = value_validation($request->all());
-        return response()->json(Comment::create($data),201);
+        return response()->json(Comment::create($data), 201);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Comment  $comment
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Comment $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Comment $comment)
     {
-        $comment = Comment::find($id);
-        $data = value_validation($request->all());
-        $comment->update($data);
-        return response()->json($comment,200);
+        if (СheckWhoUpdated::check($comment['user_id'])) {
+            $data = value_validation($request->all());
+            $comment->update($data);
+            return response()->json($comment, 200);
+        } else {
+            return response()->json(['Error' => 'You don\' have rule'], 403);
+        }
+
     }
 
+
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Comment  $comment
-     * @return \Illuminate\Http\Response
+     * @param Comment $comment
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Comment $comment)
     {
-        $comment = Comment::find($id);
-        $comment->delete();
-        return response()->noContent(204);
+        if (СheckWhoUpdated::check($comment['user_id'])) {
+            $comment->delete();
+            return response()->noContent(204);
+        } else {
+            return response()->json(['Error' => 'You don\' have rule'], 403);
+        }
     }
 }

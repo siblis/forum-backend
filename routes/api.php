@@ -31,7 +31,7 @@ Route::group([
     Route::post('register', 'AuthController@register'); //Регистрация пользователя. Возвращает user, token, статус 201
 });
 
-//
+//todo разобраться с временем жизни токена
 Route::group(['middleware' => ['not.post', 'jwt.verify','user_id']], function () {
     //роуты для постов
     Route::post('/posts', 'PostsController@store');
@@ -48,7 +48,7 @@ Route::group(['middleware' => ['not.post', 'jwt.verify','user_id']], function ()
 });
 
 //Роуты удаления
-Route::group(['middleware' => ['not.post', 'jwt.verify','admin_val']], function () {
+Route::group(['middleware' => ['not.post', 'jwt.verify'/*,'admin_val'*/]], function () {
     Route::delete('/posts/{post}', 'PostsController@delete');
     Route::delete('/comments/{id}', 'CommentsController@destroy');
     Route::delete('/tags/{tag}', 'TagsController@destroy');
