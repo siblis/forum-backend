@@ -63,7 +63,12 @@ class CategoriesController extends Controller
      */
     public function update(Categories $category)
     {
-        //todo Добавить валидацию
+        request()->validate([
+            'name' => 'required',
+            'avatar' => 'required',
+            'description' => 'required'
+        ]);
+
         if (СheckWhoUpdated::check($category['user_id'])) {
             $category->update(request()->all());
             return response()->json($category, 200);
@@ -77,7 +82,7 @@ class CategoriesController extends Controller
     public function destroy(Categories $category)
     {
         if (СheckWhoUpdated::check($category['user_id'])) {
-            Categories::findOrFail($id)->delete();
+            $category->delete();
             return response()->noContent(204);
         } else {
             return response()->json(['Error' => 'You don\' have rule'], 403);
