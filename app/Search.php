@@ -8,21 +8,20 @@ class Search extends Model
 {
     public static function searchQuery($search)
     {
-
         if($search !='')
         {
             $categories = Categories::whereRaw('LOWER ("name") LIKE ? ', [trim(strtolower($search)) . '%'])
-                ->get(['name']);
+                ->paginate(15)->get(['name']);
 
             $posts = Post::whereRaw('LOWER ("title") LIKE ?', [trim(strtolower($search)) . '%'])
                 ->orWhereRaw('LOWER ("content") LIKE ?', [trim(strtolower($search)) . '%'])
-                ->get(['title', 'content']);
+                ->paginate(15)->get(['title', 'content']);
 
             $users = User::whereRaw('LOWER ("name") LIKE ?', [trim(strtolower($search)) . '%'])
                 ->orWhereRaw('LOWER ("email") LIKE ?', [trim(strtolower($search)) . '%'])
-                ->get(['name', 'email']);
+                ->paginate(15)->get(['name', 'email']);
 
-            $tags = Tag::whereRaw('LOWER ("name") LIKE ?', [trim(strtolower($search)) . '%'])->get();
+            $tags = Tag::whereRaw('LOWER ("name") LIKE ?', [trim(strtolower($search)) . '%'])->paginate(15)->get();
 
             $result = [];
 

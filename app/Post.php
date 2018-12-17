@@ -155,7 +155,7 @@ class Post extends Model
      */
     public static function showBestPosts()
     {
-        $posts = Post::all('id', 'title');
+        $posts = Post::all('id', 'title')->paginate(7);
         $posts = self::addCommentCount($posts);
         return $posts->sortByDesc('comments');
     }

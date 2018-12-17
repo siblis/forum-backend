@@ -13,7 +13,7 @@ Route::get('/posts', 'PostsController@index');
 Route::get('/posts/{post}', 'PostsController@show');
 Route::get('/best-posts', 'PostsController@bestPosts');
 //Маршруты для комментариев
-Route::get('/posts/{id}/comments', 'CommentsController@index');
+Route::get('/posts/{id}/comments/', 'CommentsController@index');
 //Маршруты для Категорий
 Route::get('/categories', 'CategoriesController@index');
 Route::get('/categories/{category}', 'CategoriesController@show');
@@ -32,6 +32,9 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh'); //Обновление токена
     Route::get('me', 'AuthController@me'); // Получение авторизованного пользователя. Возвращает user
     Route::post('register', 'AuthController@register'); //Регистрация пользователя. Возвращает user, token, статус 201
+
+    Route::get('/{id}', 'UsersInfoController@show');
+    Route::put('/{id}', 'UsersInfoController@update');
 });
 
 //todo разобраться с временем жизни токена

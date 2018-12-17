@@ -26,8 +26,6 @@ class CommentsController extends Controller
      */
     public function store(Request $request)
     {
-        //todo добавить стандартную валидацию laravel
-
         request()->validate
         ([
             'user_id' => 'required',

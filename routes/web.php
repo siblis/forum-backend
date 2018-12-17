@@ -17,13 +17,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Route::get('/topics/comments/{id}', 'CommentsController@getAllPost');
-
-Route::get('best-posts', 'PostsController@bestPosts');
-
-Route::get('posts','PostsController@index');
-Route::get('posts/{id}', 'PostsController@show');
-
 
 Route::get('/csrd', function(){
     return response()->json(Session::token());
