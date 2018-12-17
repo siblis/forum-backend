@@ -21,8 +21,7 @@ class UsersInfo extends Migration
             $table->string('phone')->nullable();
             $table->text('about')->nullable();
             $table->string('job')->nullable();
-            $table->integer('rating');
-            $table->integer('rule');
+            $table->integer('rating')->default(0);
             $table->timestamp('email_verified')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
