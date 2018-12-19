@@ -24,16 +24,16 @@ class CommentsController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request,$post_id)
     {
         request()->validate
         ([
             'user_id' => 'required',
-            'post_id' => 'required',
             'content' => 'required',
         ]);
 
         $data = value_validation($request->all());
+        $data['post_id'] = $post_id;
         return response()->json(Comment::create($data), 201);
     }
 

@@ -43,7 +43,7 @@ Route::group(['middleware' => ['not.post', 'jwt.verify','user_id']], function ()
     Route::post('/posts', 'PostsController@store');
     Route::put('/posts/{post}', 'PostsController@update');
     //роуты для комментариев
-    Route::post('/comments', 'CommentsController@store');
+    Route::post('/posts/{id}/comments', 'CommentsController@store');
     Route::put('/comments/{id}', 'CommentsController@update');
     //роуты для тегов
     Route::post('/tags', 'TagsController@store');
