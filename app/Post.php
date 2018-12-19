@@ -52,11 +52,11 @@ class Post extends Model
     protected $appends=['tags'];
     protected $hidden=['tags'];
 
-    public static function create($request) {
+    public static function created($request) {
         $post = new Post();
         $post->fill($request);
         $post->save();
-        $post->saveTags();
+//        $post->saveTags();
         return $post;
     }
 
