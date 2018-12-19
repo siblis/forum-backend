@@ -18,7 +18,7 @@ class Posts extends Migration
             $table->integer('category_id');
             $table->integer('user_id');
             $table->string('title');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->text('content');
             $table->integer('views')->default(0);
             $table->integer('like')->default(0);
