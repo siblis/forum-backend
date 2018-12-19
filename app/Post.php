@@ -150,6 +150,13 @@ class Post extends Model
         return response()->json($posts, 200);
     }
 
+    public static function showCategoryPosts($id)
+    {
+        $posts = Post::all()->where('category_id',$id)->sortByDesc(['created_at'])->paginate(15);
+        $posts = self::addCommentCount($posts);
+        return response()->json($posts, 200);
+    }
+
     /**
      * @return Post[]|\Illuminate\Database\Eloquent\Collection
      */
