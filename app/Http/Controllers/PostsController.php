@@ -10,12 +10,17 @@ use App\Utilities\СheckWhoUpdated;
 
 class PostsController extends Controller
 {
-    /**
-     * @return Post[]|\Illuminate\Database\Eloquent\Collection
-     */
     public function index()
     {
         return Post::showAllPosts();
+    }
+
+    /**
+     * @return Post[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function categoryShow($id)
+    {
+        return Post::showCategoryPosts($id);
     }
 
     /**

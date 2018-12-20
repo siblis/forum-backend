@@ -11,16 +11,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            'name'=>"test",
-            'password' => Hash::make('123'),
-            'email'=>'test@yandex.ru'
-        ]);
-        DB::table('tags')->insert(['name'=>'tags']);
-        $this->call(UserSeed::class);
-        $this->call(CategoriesSeed::class);
-        $this->call(TopicsSeed::class);
-        $this->call(CommentariesSeed::class);
-        // $this->call(UsersTableSeeder::class);
+//        factory(App\User::class,'admin',5)->create();
+//        factory(App\User::class,5)->create();
+        factory(App\Categories::class,4)->create();
+        factory(App\Post::class,10)->create();
+        factory(App\Comment::class,25)->create();
     }
 }

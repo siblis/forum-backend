@@ -50,7 +50,7 @@ class Post extends Model
     public $timestamps = true;
     protected $with=['username'];
     protected $appends=['tags'];
-    protected $hidden=['tags_array'];
+    protected $hidden=['tags'];
 
     public static function create($request) {
         $post = new Post();
@@ -61,11 +61,11 @@ class Post extends Model
     }
 
     public function getTagsAttribute() {
-        return array_pluck($this->tags_array,'name','name');
+        return array_pluck($this->tags,'name','name');
     }
 
     public function getOldTagsAttribute() {
-        return array_pluck($this->tags_array,'name','name');
+        return array_pluck($this->tags,'name','name');
     }
 
     public function update(array $attributes = [], array $options = [])
@@ -90,7 +90,7 @@ class Post extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
-    protected function tags_array() {
+    protected function tags() {
         return $this->hasManyThrough('App\Tag','App\PostTags','post_id','id',
             'id','tag_id')->select(['name']);
     }
@@ -146,6 +146,13 @@ class Post extends Model
     public static function showAllPosts()
     {
         $posts = Post::all()->sortByDesc(['created_at'])->paginate(15);
+        $posts = self::addCommentCount($posts);
+        return response()->json($posts, 200);
+    }
+
+    public static function showCategoryPosts($id)
+    {
+        $posts = Post::all()->where('category_id',$id)->sortByDesc(['created_at'])->paginate(15);
         $posts = self::addCommentCount($posts);
         return response()->json($posts, 200);
     }
