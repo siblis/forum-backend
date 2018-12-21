@@ -108,15 +108,22 @@ class Post extends Model
      */
     public static function showAllPosts()
     {
-        $posts = Post::all()->sortByDesc(['created_at'])->paginate(15);
-        $posts = self::addCommentCount($posts);
+        $posts = DB::select('
+            select p.id,p.category_id,p.title,p.description,p.content,p.created_at,p.user_id,
+           (select name from users where id= p.user_id) as username,
+           (select count(*) from comments where post_id = p.id) as comments
+            from posts as p ORDER BY created_at DESC');
         return response()->json($posts, 200);
     }
 
     public static function showCategoryPosts($id)
     {
-        $posts = Post::all()->where('category_id',$id)->sortByDesc(['created_at'])->paginate(15);
-        $posts = self::addCommentCount($posts);
+        $posts = DB::select('
+            select p.id,p.category_id,p.title,p.description,p.content,p.created_at,p.user_id,
+           (select name from users where id= p.user_id) as username,
+           (select count(*) from comments where post_id = p.id) as comments
+            from posts as p WHERE category_id=\''.$id.'\'  ORDER BY created_at DESC
+        ');
         return response()->json($posts, 200);
     }
 
@@ -125,9 +132,11 @@ class Post extends Model
      */
     public static function showBestPosts()
     {
-        $posts = Post::all('id', 'title')->paginate(7);
-        $posts = self::addCommentCount($posts);
-        return $posts->sortByDesc('comments');
+        $posts = DB::select('select p.id,p.category_id,p.title,p.description,p.content,p.created_at,p.user_id,
+           (select name from users where id= p.user_id) as username,
+           (select count(*) from comments where post_id = p.id) as comments
+            from posts as p ORDER BY comments DESC');
+        return response()->json($posts,200);
     }
 
     protected static function addCommentCount($posts)

@@ -11,7 +11,7 @@ class TagsController extends Controller
 
     public function index()
     {
-        return Tag::all();
+        return Tag::all('name');
     }
 
 //  Метод вывода конкретнго Тэга.
