@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 use App\Tag;
 use App\PostTags;
 
@@ -113,7 +114,8 @@ class Post extends Model
            (select name from users where id= p.user_id) as username,
            (select count(*) from comments where post_id = p.id) as comments
             from posts as p ORDER BY created_at DESC');
-        return response()->json($posts, 200);
+        $all_posts = collect($posts)->paginate(15);
+        return response()->json($all_posts, 200);
     }
 
     public static function showCategoryPosts($id)
@@ -124,7 +126,8 @@ class Post extends Model
            (select count(*) from comments where post_id = p.id) as comments
             from posts as p WHERE category_id=\''.$id.'\'  ORDER BY created_at DESC
         ');
-        return response()->json($posts, 200);
+        $category_posts = collect($posts)->paginate(15);
+        return response()->json($category_posts, 200);
     }
 
     /**
@@ -136,7 +139,8 @@ class Post extends Model
            (select name from users where id= p.user_id) as username,
            (select count(*) from comments where post_id = p.id) as comments
             from posts as p ORDER BY comments DESC');
-        return response()->json($posts,200);
+        $best_posts = collect($posts)->paginate(15);
+        return response()->json($best_posts,200);
     }
 
     protected static function addCommentCount($posts)
