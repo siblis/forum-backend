@@ -35,6 +35,7 @@ class PostsController extends Controller
      * @param Post $post
      * @return Post[]|\Illuminate\Database\Eloquent\Collection
      */
+    //todo сломался счетчик
     public function show(Post $post)
     {
         $post->views++;

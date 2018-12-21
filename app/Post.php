@@ -110,7 +110,7 @@ class Post extends Model
     public static function showAllPosts()
     {
         $posts = DB::select('
-            select p.id,p.category_id,p.title,p.description,p.content,p.created_at,p.user_id,
+            select p.id,p.category_id,p.title,p.description,p.content,p.created_at,p.user_id,p.views,
            (select name from users where id= p.user_id) as username,
            (select count(*) from comments where post_id = p.id) as comments
             from posts as p ORDER BY created_at DESC');
@@ -121,7 +121,7 @@ class Post extends Model
     public static function showCategoryPosts($id)
     {
         $posts = DB::select('
-            select p.id,p.category_id,p.title,p.description,p.content,p.created_at,p.user_id,
+            select p.id,p.category_id,p.title,p.description,p.content,p.created_at,p.user_id,p.views,
            (select name from users where id= p.user_id) as username,
            (select count(*) from comments where post_id = p.id) as comments
             from posts as p WHERE category_id=\''.$id.'\'  ORDER BY created_at DESC
@@ -135,7 +135,7 @@ class Post extends Model
      */
     public static function showBestPosts()
     {
-        $posts = DB::select('select p.id,p.category_id,p.title,p.description,p.content,p.created_at,p.user_id,
+        $posts = DB::select('select p.id,p.category_id,p.title,p.description,p.content,p.created_at,p.user_id,p.views,
            (select name from users where id= p.user_id) as username,
            (select count(*) from comments where post_id = p.id) as comments
             from posts as p ORDER BY comments DESC');
