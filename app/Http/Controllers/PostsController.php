@@ -37,6 +37,9 @@ class PostsController extends Controller
      */
     public function show(Post $post)
     {
+        $post->views++;
+        $post->timestamps=false;
+        $post->save();
         return response()->json($post, 200);
     }
 
@@ -71,7 +74,7 @@ class PostsController extends Controller
                     'title' => 'required',
                     'content' => 'required'
                 ]);
-                $post->update($request->all());
+                $post->update($post->updater($request->all()));
                 return response()->json($post, 200);
             } else {
                 return response()->json(['Error' => 'Timeout'], 400);
