@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use App\User;
 use Illuminate\Http\Request;
 use App\Utilities\СheckWhoUpdated;
 
@@ -15,7 +16,8 @@ class CommentsController extends Controller
      */
     public function index($post_id)
     {
-        return response()->json(Comment::all()->where('post_id', $post_id)->paginate(10),200);
+        $data = Comment::all(['id','post_id','user_id','content','created_at'])->where('post_id', $post_id)->paginate(10);
+        return response()->json($data,200);
     }
 
     /**
@@ -31,10 +33,11 @@ class CommentsController extends Controller
             'user_id' => 'required',
             'content' => 'required',
         ]);
-
         $data = value_validation($request->all());
         $data['post_id'] = $post_id;
-        return response()->json(Comment::create($data), 201);
+        $data = Comment::create($data); // Запись комментария в базу
+        $data['username'] = User::where('id',$data['user_id'])->first()['name'];//Добавление имени пользователя
+        return response()->json($data, 201);
     }
 
     /**
@@ -68,7 +71,7 @@ class CommentsController extends Controller
             $comment->delete();
             return response()->noContent(204);
         } else {
-            return response()->json(['Error' => 'You don\' have rule'], 403);
+            return response()->json(['Error' => 'You don\'t have rule'], 403);
         }
     }
 }
