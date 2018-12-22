@@ -29,4 +29,60 @@ class PostsTest extends TestCase
             'id','category_id','title','description','content','tags','views','created_at','canEdit'
         ]);
     }
+
+    public function testPostOne()
+    {
+        $response = $this->json('GET','/posts/1')->original;
+        $this->assertEquals($response['id'],1);
+        $this->assertIsString($response['title']);
+        $this->assertIsString($response['content']);
+    }
+
+    public function testFailCreatePost()
+    {
+        $login = $this->json('POST','/users/login',[
+            'email' => 'admin@mail.ru',
+            'password' => 'secret'
+        ])->original;
+        $response = $this->json('POST','/posts',[
+            'category_id' => 1,
+            'title' => 'Тестовый заголовок',
+            'content' => 'Текстовая запись для теста',
+            'tags' => ['tag_test1','tag_test2']
+        ]);
+        $response->assertStatus(403);
+    }
+
+    public function testCreatePost()
+    {
+        $login = $this->json('POST','/users/login',[
+            'email' => 'admin@mail.ru',
+            'password' => 'secret'
+        ])->original;
+        $response = $this->withHeaders(['authorization'=>'Bearer '.$login['access_token']])->json('POST','/posts',[
+            'category_id' => 1,
+            'title' => 'Тестовый заголовок',
+            'content' => 'Текстовая запись для теста',
+            'tags' => ['tag_test1','tag_test2']
+        ]);
+        $response->assertStatus(201);
+        $response->assertJsonStructure(['id','user_id','category_id','title','content','tags','created_at']);
+    }
+
+    public function testCreatePostWithDescription()
+    {
+        $login = $this->json('POST','/users/login',[
+            'email' => 'admin@mail.ru',
+            'password' => 'secret'
+        ])->original;
+        $response = $this->withHeaders(['authorization'=>'Bearer '.$login['access_token']])->json('POST','/posts',[
+            'category_id' => 1,
+            'title' => 'Тестовый заголовок',
+            'content' => 'Текстовая запись для теста',
+            'description' => 'Описание',
+            'tags' => ['tag_test1','tag_test2']
+        ]);
+        $response->assertStatus(201);
+        $response->assertJsonStructure(['id','user_id','category_id','title','description','content','tags','created_at']);
+    }
 }
