@@ -41,6 +41,11 @@ class PostsController extends Controller
         $post->views++;
         $post->timestamps=false;
         $post->save();
+	if (time() <= strtotime($post->created_at) + 3600) {
+		$post['canEdit']=true;
+	} else {
+		$post['canEdit']=false;	
+	}
         return response()->json($post, 200);
     }
 
