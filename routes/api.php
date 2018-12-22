@@ -10,7 +10,7 @@ Route::get('/search/{keyword}', 'SearchController@search');
 
 //Маршруты для постов
 Route::get('/posts', 'PostsController@index');
-Route::get('/categories/{categoty}/posts','PostsController@categoryShow');
+Route::get('/categories/{category}/posts','PostsController@categoryShow');
 Route::get('/posts/{post}', 'PostsController@show');
 Route::get('/best-posts', 'PostsController@bestPosts');
 //Маршруты для комментариев
