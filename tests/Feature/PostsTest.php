@@ -2,17 +2,27 @@
 
 namespace Tests\Feature;
 
+use Tests\DatabaseSeed;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 
 class PostsTest extends TestCase
 {
+    use DatabaseSeed;
     /**
      * A basic test example.
      *
      * @return void
      */
+    public function testRegistration()
+    {
+
+        $this->assertTrue(true);
+    }
+
+
     public function testGetAllPosts()
     {
         $response = $this->json('GET','/posts?page=1');
@@ -36,6 +46,11 @@ class PostsTest extends TestCase
         $this->assertEquals($response['id'],1);
         $this->assertIsString($response['title']);
         $this->assertIsString($response['content']);
+        if (time() <= strtotime($response['created_at'])+3600) {
+            $this->assertTrue($response['canEdit']);
+        } else {
+            $this->assertFalse($response['canEdit']);
+        }
     }
 
     public function testFailCreatePost()
