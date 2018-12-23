@@ -18,7 +18,7 @@ $factory->define(App\User::class, function (Faker $faker) {
     return [
         'name' => $faker->unique()->lastName,
         'email' => $faker->unique()->safeEmail,
-        'password' => Hash::make(md5('secret')), // secret
+        'password' => Hash::make('secret'), // secret
         'role' => 'user'
     ];
 });

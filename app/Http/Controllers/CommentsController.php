@@ -47,8 +47,9 @@ class CommentsController extends Controller
      * @param  \App\Comment $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, $comment)
     {
+        $comment = Comment::find($comment);
         if (СheckWhoUpdated::check($comment['user_id'])) {
             $data = value_validation($request->all());
             $comment->update($data);
@@ -65,8 +66,9 @@ class CommentsController extends Controller
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy(Comment $comment)
+    public function destroy($comment)
     {
+        $comment = Comment::find($comment);
         if (СheckWhoUpdated::check($comment['user_id'])) {
             $comment->delete();
             return response()->noContent(204);
