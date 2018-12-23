@@ -70,7 +70,7 @@ class CategoriesTest extends TestCase
                 'avatar' => 'Тестовый аватар',
                 'status' => 1,
             ]);
-        $response->assertStatus(200);// при 201 выдает ошибку?
+        $response->assertStatus(200);// При 201 выдает ошибку?
         $response->assertJsonStructure(['id','name','status','avatar', 'description', 'created_at', 'updated_at']);
     }
 }
