@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Users;
+use App\UsersInfo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -42,7 +44,15 @@ class UsersController extends Controller
             'user_email' => 'required',
             'password' => 'required',
         ]);
-        $data = Users::create(request(['username', 'user_email', 'password']));
+        try {
+            DB::beginTransaction();
+            $data = Users::create(request(['username', 'user_email', 'password']));
+            dd($data['id']);
+            UsersInfo::create(['id'=>$data['id']]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
         return response()->json($data, 201);
     }
 

@@ -16,14 +16,4 @@ class Comment extends Model
     public function username() {
         return $this->hasOne("App\User",'id','user_id')->select(['id','name']);
     }
-
-    public static function checkWhoUpdated($post){
-        $user = auth()->user();
-        if ($post['user_id'] == $user['id'] || $user['role'] === 'admin')
-        {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
