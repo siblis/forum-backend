@@ -16,7 +16,7 @@ use Tests\TestCase;
 
 class CategoriesTest extends TestCase
 {
-//    use DatabaseSeed;
+    use DatabaseSeed;
 //    use DatabaseMigrations;
     public function testGetAllCategories()
     {
