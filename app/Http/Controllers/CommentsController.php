@@ -55,7 +55,7 @@ class CommentsController extends Controller
             $comment->update($data);
             return response()->json($comment, 200);
         } else {
-            return response()->json(['Error' => 'You don\' have rule'], 403);
+            return response()->json(['Error' => 'You don\'t have rule'], 403);
         }
 
     }

@@ -71,7 +71,7 @@ class CommentsTest extends TestCase
     /**
      * создание комментария без авторизации
      */
-    public function testCreateComentsFailAuth():void
+    public function testCreateCommentsFailAuth():void
     {
         $response = $this->json('POST','/posts/1/comments',['content'=>'test']);
         $response->assertStatus(403);

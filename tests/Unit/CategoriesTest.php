@@ -17,6 +17,7 @@ use Tests\TestCase;
 class CategoriesTest extends TestCase
 {
     use DatabaseSeed;
+
 //    use DatabaseMigrations;
     public function testGetAllCategories()
     {
@@ -35,7 +36,7 @@ class CategoriesTest extends TestCase
     public function testCategoryOne()
     {
         $response = $this->json('GET', '/categories/1')->original;
-        $this->assertEquals($response['id'], 1);
+        $this->assertIsNumeric($response['id'], 1);
         $this->assertIsString($response['name']);
         $this->assertIsString($response['description']);
     }
@@ -70,7 +71,7 @@ class CategoriesTest extends TestCase
                 'avatar' => 'Тестовый аватар',
                 'status' => 1,
             ]);
-        $response->assertStatus(200);// При 201 выдает ошибку?
+        $response->assertStatus(201);
         $response->assertJsonStructure(['id','name','status','avatar', 'description', 'created_at', 'updated_at']);
     }
 }
