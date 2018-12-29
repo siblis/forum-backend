@@ -8,7 +8,12 @@ class Comment extends Model
 {
     protected $fillable = [
         'user_id',
-        'topic_id',
+        'post_id',
         'content'
     ];
+    protected $with=['username'];
+
+    public function username() {
+        return $this->hasOne("App\User",'id','user_id')->select(['id','name']);
+    }
 }

@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -11,11 +12,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('tags')->insert(['name'=>'tags']);
-        $this->call(UserSeed::class);
-        $this->call(CategoriesSeed::class);
-        $this->call(TopicsSeed::class);
-        $this->call(CommentariesSeed::class);
-        // $this->call(UsersTableSeeder::class);
+        factory(App\User::class,'admin',1)->create();
+        factory(App\User::class,5)->create();
+        factory(App\UsersInfo::class,6)->create();
+        factory(App\Categories::class,4)->create();
+        factory(App\Post::class,10)->create();
+        factory(App\Comment::class,25)->create();
     }
 }
