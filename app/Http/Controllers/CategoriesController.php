@@ -71,7 +71,7 @@ class CategoriesController extends Controller
 
         if (СheckWhoUpdated::check($category['user_id'])) {
             $category->update(request()->all());
-            return response()->json($category, 200);
+            return response()->json($category, 201);
         } else {
             return response()->json(['Error' => 'You don\' have rule'], 403);
         }

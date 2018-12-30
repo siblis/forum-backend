@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 use App\Tag;
 use App\PostTags;
 
@@ -49,32 +50,22 @@ class Post extends Model
     ];
     public $timestamps = true;
     protected $with=['username'];
-    protected $appends=['tags'];
-    protected $hidden=['tags_array'];
+//    protected $appends=['tags'];
+//    protected $hidden=['tags'];
 
     public static function create($request) {
         $post = new Post();
         $post->fill($request);
+        //todo Разобраться с тегами
+        $post['tags'] = $post->saveTags($request['tags']);
         $post->save();
-        $post->saveTags();
         return $post;
     }
 
-    public function getTagsAttribute() {
-        return array_pluck($this->tags_array,'name','name');
-    }
-
-    public function getOldTagsAttribute() {
-        return array_pluck($this->tags_array,'name','name');
-    }
-
-    public function update(array $attributes = [], array $options = [])
+    public function updater($request)
     {
-        if (parent::update($attributes, $options)) {
-            $this->saveTags();
-            return true;
-        }
-        return false;
+        $request['tags'] = $this->saveTags($request['tags']);
+        return $request;
     }
 
     public function username() {
@@ -88,56 +79,29 @@ class Post extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     * @param $meTags
+     * @return string
      */
-    protected function tags_array() {
-        return $this->hasManyThrough('App\Tag','App\PostTags','post_id','id',
-            'id','tag_id')->select(['name']);
-    }
-
-    public function saveTags() {
-        if (is_array($this->tags)) {
-            $newTags=array_diff($this->tags,$this->oldTags);
-            $deleteTags=array_diff($this->oldTags,$this->tags);
-            $this->addTags($newTags);
-            $this->deleteTags($deleteTags);
-        } else {
-            PostTags::query()->where('post_id',$this->id)->delete();
+    public function saveTags($meTags) {
+        $allTags = Tag::all();
+        $baseTag = [];
+        foreach ($allTags->toArray() as $key => $item )
+        {
+            $baseTag[$item['id']] = $item['name'];
         }
+        $newTag = array_diff($meTags,$baseTag);
+        $this->addTags($newTag);
+        return implode(',',$meTags);
     }
 
     /**
      * @param $newTags array
      */
-    private function addTags($newTags) {
-        foreach ($newTags as $newTag) {
-            if(!$tag = Tag::query()->where(['name'=>$newTag])->first()) {
-                $tag = new Tag();
-                $tag->name=$newTag;
-                if ($tag->save()) {
-                    $tag = null;
-                }
-            }
-            if ($tag instanceof Tag) {
-                $pt = new PostTags();
-                $pt->tag_id=$tag->id;
-                $pt->post_id=$this->id;
-                $pt->save();
-
-            }
+    private function addTags($newTags)
+    {
+        foreach ($newTags as $item) {
+            Tag::create(['name'=> $item]);
         }
-    }
-
-    /**
-     * @param $deleteTags array
-     */
-    private function deleteTags($deleteTags) {
-        foreach ($deleteTags as $deleteTag) {
-            PostTags::query()->where(['tag_id'=>Tag::where(['name'=>$deleteTag])->value('id'),
-                'post_id'=>$this->id])->delete();
-        }
-        /*return PostTags::query()->where(['tag_id'=>Tag::where(['name'=>$deleteTag])->value('id'),
-                'post_id'=>$this->id]);*/
     }
 
     /**
@@ -145,9 +109,25 @@ class Post extends Model
      */
     public static function showAllPosts()
     {
-        $posts = Post::all()->sortByDesc(['created_at'])->paginate(15);
-        $posts = self::addCommentCount($posts);
-        return response()->json($posts, 200);
+        $posts = DB::select('
+            select p.id,p.category_id,p.title,p.description,p.content,p.created_at,p.user_id,p.views,p.tags,
+           (select name from users where id= p.user_id) as username,
+           (select count(*) from comments where post_id = p.id) as comments
+            from posts as p ORDER BY created_at DESC');
+        $all_posts = collect($posts)->paginate(15);
+        return response()->json($all_posts, 200);
+    }
+
+    public static function showCategoryPosts($id)
+    {
+        $posts = DB::select('
+            select p.id,p.category_id,p.title,p.description,p.content,p.created_at,p.user_id,p.views,p.tags,
+           (select name from users where id= p.user_id) as username,
+           (select count(*) from comments where post_id = p.id) as comments
+            from posts as p WHERE category_id=\''.$id.'\'  ORDER BY created_at DESC
+        ');
+        $category_posts = collect($posts)->paginate(15);
+        return response()->json($category_posts, 200);
     }
 
     /**
@@ -155,9 +135,12 @@ class Post extends Model
      */
     public static function showBestPosts()
     {
-        $posts = Post::all('id', 'title')->paginate(7);
-        $posts = self::addCommentCount($posts);
-        return $posts->sortByDesc('comments');
+        $posts = DB::select('select p.id,p.category_id,p.title,p.description,p.content,p.created_at,p.user_id,p.views,p.tags,
+           (select name from users where id= p.user_id) as username,
+           (select count(*) from comments where post_id = p.id) as comments
+            from posts as p ORDER BY comments DESC');
+        $best_posts = collect($posts)->paginate(15);
+        return response()->json($best_posts,200);
     }
 
     protected static function addCommentCount($posts)

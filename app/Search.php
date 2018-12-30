@@ -8,20 +8,21 @@ class Search extends Model
 {
     public static function searchQuery($search)
     {
+
         if($search !='')
         {
-            $categories = Categories::whereRaw('LOWER ("name") LIKE ? ', [trim(strtolower($search)) . '%'])
-                ->paginate(15)->get(['name']);
+            $categories = Categories::whereRaw('LOWER ("name") LIKE ? ', ['%' . trim(strtolower($search)) . '%'])
+                ->paginate(15);
 
-            $posts = Post::whereRaw('LOWER ("title") LIKE ?', [trim(strtolower($search)) . '%'])
-                ->orWhereRaw('LOWER ("content") LIKE ?', [trim(strtolower($search)) . '%'])
-                ->paginate(15)->get(['title', 'content']);
+            $posts = Post::whereRaw('LOWER ("title") LIKE ?', ['%' . trim(strtolower($search)) . '%'])
+                ->orWhereRaw('LOWER ("content") LIKE ?', ['%' . trim(strtolower($search)) . '%'])
+                ->paginate(15);
 
-            $users = User::whereRaw('LOWER ("name") LIKE ?', [trim(strtolower($search)) . '%'])
-                ->orWhereRaw('LOWER ("email") LIKE ?', [trim(strtolower($search)) . '%'])
-                ->paginate(15)->get(['name', 'email']);
+            $users = User::whereRaw('LOWER ("name") LIKE ?', ['%' . trim(strtolower($search)) . '%'])
+                ->orWhereRaw('LOWER ("email") LIKE ?', ['%'. trim(strtolower($search)) . '%'])
+                ->paginate(15);
 
-            $tags = Tag::whereRaw('LOWER ("name") LIKE ?', [trim(strtolower($search)) . '%'])->paginate(15)->get();
+            $tags = Tag::whereRaw('LOWER ("name") LIKE ?', [trim(strtolower($search)) . '%'])->paginate(15);
 
             $result = [];
 
