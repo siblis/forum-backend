@@ -10,25 +10,42 @@ use App\Utilities\СheckWhoUpdated;
 
 class PostsController extends Controller
 {
+    public function index()
+    {
+        return Post::showAllPosts();
+    }
+
     /**
      * @return Post[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function index()
+    public function categoryShow($id)
     {
-        $posts = Post::paginate(15);
-        return response()->json($posts, 200);
+        return Post::showCategoryPosts($id);
+    }
+
+    /**
+     * @return Post[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function bestPosts()
+    {
+        return Post::showBestPosts();
     }
 
     /**
      * @param Post $post
-     * @return Post
+     * @return Post[]|\Illuminate\Database\Eloquent\Collection
      */
+    //todo сломался счетчик
     public function show(Post $post)
     {
         $post->views++;
-        $post->timestamps = false;
+        $post->timestamps=false;
         $post->save();
-        $post['comments'] = DB::table('comments')->where('post_id', $post->id)->count();
+	if (time() <= strtotime($post->created_at) + 3600) {
+		$post['canEdit']=true;
+	} else {
+		$post['canEdit']=false;	
+	}
         return response()->json($post, 200);
     }
 
@@ -63,7 +80,7 @@ class PostsController extends Controller
                     'title' => 'required',
                     'content' => 'required'
                 ]);
-                $post->update($request->all());
+                $post->update($post->updater($request->all()));
                 return response()->json($post, 200);
             } else {
                 return response()->json(['Error' => 'Timeout'], 400);

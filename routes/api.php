@@ -5,12 +5,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//Маршрут для поиска
+Route::get('/search/{keyword}', 'SearchController@search');
 
 //Маршруты для постов
 Route::get('/posts', 'PostsController@index');
+Route::get('/categories/{category}/posts','PostsController@categoryShow');
 Route::get('/posts/{post}', 'PostsController@show');
+Route::get('/best-posts', 'PostsController@bestPosts');
 //Маршруты для комментариев
-Route::get('/comments/{id}', 'CommentsController@index');
+Route::get('/posts/{id}/comments/', 'CommentsController@index');
 //Маршруты для Категорий
 Route::get('/categories', 'CategoriesController@index');
 Route::get('/categories/{category}', 'CategoriesController@show');
@@ -29,6 +33,9 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh'); //Обновление токена
     Route::get('me', 'AuthController@me'); // Получение авторизованного пользователя. Возвращает user
     Route::post('register', 'AuthController@register'); //Регистрация пользователя. Возвращает user, token, статус 201
+
+    Route::get('/{id}', 'UsersInfoController@show');
+    Route::put('/{id}', 'UsersInfoController@update');
 });
 
 //todo разобраться с временем жизни токена
@@ -37,7 +44,7 @@ Route::group(['middleware' => ['not.post', 'jwt.verify','user_id']], function ()
     Route::post('/posts', 'PostsController@store');
     Route::put('/posts/{post}', 'PostsController@update');
     //роуты для комментариев
-    Route::post('/comments', 'CommentsController@store');
+    Route::post('/posts/{id}/comments', 'CommentsController@store');
     Route::put('/comments/{id}', 'CommentsController@update');
     //роуты для тегов
     Route::post('/tags', 'TagsController@store');
