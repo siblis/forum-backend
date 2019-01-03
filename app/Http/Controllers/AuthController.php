@@ -27,7 +27,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -46,13 +46,14 @@ class AuthController extends Controller
             ]);
             DB::table('users_info')->insert(['id'=>$user['id']]);
             DB::commit();
+            $token = JWTAuth::fromUser($user);
+            return response()->json(compact('user','token'),201);
         } catch (\Exception $e) {
             DB::rollBack();
+            return response()->json('Error created user',500);
         }
 
-        $token = JWTAuth::fromUser($user);
 
-        return response()->json(compact('user','token'),201);
     }
 
     /**
