@@ -2,31 +2,50 @@
 
 namespace App\Http\Controllers;
 
+use http\Env\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Post;
+use App\Utilities\СheckWhoUpdated;
+
 class PostsController extends Controller
 {
+    public function index()
+    {
+        return Post::showAllPosts();
+    }
+
     /**
      * @return Post[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function index()
+    public function categoryShow($id)
     {
-        $posts = Post::paginate(15);
-        return response()->json($posts, 200);
+        return Post::showCategoryPosts($id);
+    }
+
+    /**
+     * @return Post[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function bestPosts()
+    {
+        return Post::showBestPosts();
     }
 
     /**
      * @param Post $post
-     * @return Post
+     * @return Post[]|\Illuminate\Database\Eloquent\Collection
      */
+    //todo сломался счетчик
     public function show(Post $post)
     {
         $post->views++;
         $post->timestamps=false;
         $post->save();
-        $data = $post;
-        $data['comments'] = DB::table('comments')->where('post_id',$post->id)->paginate(10);
+	if (time() <= strtotime($post->created_at) + 3600) {
+		$post['canEdit']=true;
+	} else {
+		$post['canEdit']=false;	
+	}
         return response()->json($post, 200);
     }
 
@@ -35,16 +54,16 @@ class PostsController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store (Request $request)
+    public function store(Request $request)
     {
-        $this->validate($request,[
-            'user_id'=>'required',
-            'category_id'=>'required',
-            'title'=>'required',
-            'content'=>'required'
+        $this->validate($request, [
+            'user_id' => 'required',
+            'category_id' => 'required',
+            'title' => 'required',
+            'content' => 'required'
         ]);
         $post = Post::create($request->all());
-        return response()->json($post,201);
+        return response()->json($post, 201);
     }
 
     /**
@@ -55,15 +74,20 @@ class PostsController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        if (time()<=strtotime($post->created_at)+3600) {
-            $this->validate($request,[
-                'title'=>'required',
-                'content'=>'required'
-            ]);
-            $post->update($request->all());
-            return response()->json($post,200);
+        if (СheckWhoUpdated::check($post['user_id'])) {
+            if (time() <= strtotime($post->created_at) + 3600) {
+                $this->validate($request, [
+                    'title' => 'required',
+                    'content' => 'required'
+                ]);
+                $post->update($post->updater($request->all()));
+                return response()->json($post, 200);
+            } else {
+                return response()->json(['Error' => 'Timeout'], 400);
+            }
+        } else {
+            return response()->json(['Error' => 'You don\'t have rule'], 403);
         }
-        return $post;
     }
 
     /**
@@ -73,8 +97,13 @@ class PostsController extends Controller
      */
     public function delete(Post $post)
     {
-        $post->delete();
-        return response()->json(null, 204);
+        if (СheckWhoUpdated::check($post['user_id'])) {
+            $post->delete();
+            return response()->json(null, 204);
+        } else {
+            return response()->json(['Error' => 'You don\'t have rule'], 403);
+        }
+
     }
 }
 
