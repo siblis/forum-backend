@@ -19,6 +19,7 @@ class CommentsTest extends TestCase
      */
     public function Login($login)
     {
+
         $login = $this->json('POST','/users/login',[
             'email' => $login,
             'password' => 'secret'
@@ -129,7 +130,7 @@ class CommentsTest extends TestCase
     }
 
     /**
-     * пользователь не может удалить свой комментарий
+     * пользователь не может удалить чужой комментарий
      */
     public function testDeleteCommentsFail():void
     {
