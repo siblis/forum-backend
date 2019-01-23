@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
+use App\UsersInfo;
 use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Mail\Message;
 
 class AuthController extends Controller
 {
@@ -38,12 +35,20 @@ class AuthController extends Controller
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
         }
-        $user = User::create([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => Hash::make($request->get('password')),
-            'role' => 'user'
-        ]);
+        //todo вынести это все в модель
+        try {
+            DB::beginTransaction();
+            $user = User::create([
+                'name' => $request->get('name'),
+                'email' => $request->get('email'),
+                'password' => Hash::make($request->get('password')),
+                'role' => 'user'
+            ]);
+            DB::table('users_info')->insert(['id'=>$user['id']]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
 
         $token = JWTAuth::fromUser($user);
 
