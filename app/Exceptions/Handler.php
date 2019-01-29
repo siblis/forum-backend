@@ -46,6 +46,15 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+
+        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
+            return response()->json([404], 404);
+        }
+
+        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+           return response()->json([404], 404);
+        }
+
         if ($exception instanceof \Illuminate\Database\QueryException) {
 //            dd($exception);
             switch ($exception->errorInfo[0]) {
@@ -58,5 +67,6 @@ class Handler extends ExceptionHandler
             }
         }
         return parent::render($request, $exception);
+    
     }
 }
