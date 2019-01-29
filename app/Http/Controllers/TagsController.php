@@ -11,10 +11,10 @@ class TagsController extends Controller
 
     public function index()
     {
-        return Tag::all('name');
+        return Tag::tagsNameArray();
     }
 
-//  Метод вывода конкретнго Тэга.
+//  Метод вывода конкретного Тэга.
 
     public function show(Tag $tag)
     {
