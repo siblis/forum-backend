@@ -9,13 +9,15 @@ class UsersInfoController extends Controller
 
     public function show($id)
     {
-        $user_info = UsersInfo::find($id);
+        // чтобы при запросе несуществующего пользователя возвращалась ошибка 404
+        $user_info = UsersInfo::findOrFail($id);
         return response()->json($user_info, 200);
     }
 
     public function update($id)
     {
-        $user_info = UsersInfo::find($id);
+        // чтобы при запросе несуществующего пользователя возвращалась ошибка 404
+        $user_info = UsersInfo::findOrFail($id);
         $user_info->update
         ([
             'avatar' => request('avatar'),

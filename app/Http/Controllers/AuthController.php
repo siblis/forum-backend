@@ -52,8 +52,6 @@ class AuthController extends Controller
             DB::rollBack();
             return response()->json('Error created user',500);
         }
-
-
     }
 
     /**
@@ -64,9 +62,8 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
-
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (! $token = auth()->attempt($credentials)) { // если введены неправильные данные, вернуть ошибку 403
+            return response()->json(['error' => 'Неверные данные. Авторизоваться не удалось'], 403);
         }
 
         return $this->respondWithToken($token);
