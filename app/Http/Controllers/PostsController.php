@@ -7,12 +7,21 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Utilities\СheckWhoUpdated;
+use Illuminate\Support\Facades\Input;
 
 class PostsController extends Controller
 {
     public function index()
     {
-        return Post::showAllPosts();
+        $data = Input::get('type');
+        if ($data == 'best')
+        {
+            return Post::showBestPosts();
+        }
+        else
+        {
+            return Post::showAllPosts();
+        }
     }
 
     /**
@@ -21,14 +30,6 @@ class PostsController extends Controller
     public function categoryShow($id)
     {
         return Post::showCategoryPosts($id);
-    }
-
-    /**
-     * @return Post[]|\Illuminate\Database\Eloquent\Collection
-     */
-    public function bestPosts()
-    {
-        return Post::showBestPosts();
     }
 
     /**
