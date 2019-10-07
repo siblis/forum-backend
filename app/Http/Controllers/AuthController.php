@@ -29,7 +29,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6',
         ]);
 
         if($validator->fails()){
@@ -52,8 +52,6 @@ class AuthController extends Controller
             DB::rollBack();
             return response()->json('Error created user',500);
         }
-
-
     }
 
     /**
@@ -64,9 +62,8 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
-
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (! $token = auth()->attempt($credentials)) { // если введены неправильные данные, вернуть ошибку 403
+            return response()->json(['error' => 'Неверные данные. Авторизоваться не удалось'], 403);
         }
 
         return $this->respondWithToken($token);

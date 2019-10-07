@@ -46,11 +46,20 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+
+        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
+            return response()->json([404], 404);
+        }
+
+        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+           return response()->json([404], 404);
+        }
+
         if ($exception instanceof \Illuminate\Database\QueryException) {
 //            dd($exception);
             switch ($exception->errorInfo[0]) {
                 case 23502:
-                    return response()->json(["error"=>'Полян не должны быть пустыми'],503);
+                    return response()->json(["error"=>'Поля не должны быть пустыми'],503);
                     break;
                 case 23503:
                     return response()->json(["error"=>'Нарушена целостность данных'],503);
@@ -58,5 +67,6 @@ class Handler extends ExceptionHandler
             }
         }
         return parent::render($request, $exception);
+    
     }
 }

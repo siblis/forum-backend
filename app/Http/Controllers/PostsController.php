@@ -7,12 +7,21 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Utilities\СheckWhoUpdated;
+use Illuminate\Support\Facades\Input;
 
 class PostsController extends Controller
 {
     public function index()
     {
-        return Post::showAllPosts();
+        $data = Input::get('type');
+        if ($data == 'best')
+        {
+            return Post::showBestPosts();
+        }
+        else
+        {
+            return Post::showAllPosts();
+        }
     }
 
     /**
@@ -24,28 +33,25 @@ class PostsController extends Controller
     }
 
     /**
-     * @return Post[]|\Illuminate\Database\Eloquent\Collection
-     */
-    public function bestPosts()
-    {
-        return Post::showBestPosts();
-    }
-
-    /**
      * @param Post $post
      * @return Post[]|\Illuminate\Database\Eloquent\Collection
      */
-    //todo сломался счетчик
-    public function show(Post $post)
+    //todo сломался счетчик - ПОЧИНЕН
+    /**
+     * @param $postId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show($postId)
     {
+        $post = Post::find($postId);
         $post->views++;
         $post->timestamps=false;
         $post->save();
-	if (time() <= strtotime($post->created_at) + 3600) {
-		$post['canEdit']=true;
-	} else {
-		$post['canEdit']=false;	
-	}
+        if (time() <= strtotime($post->created_at) + 3600) {
+            $post['canEdit']=true;
+        } else {
+            $post['canEdit']=false;
+        }
         return response()->json($post, 200);
     }
 
