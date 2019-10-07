@@ -46,13 +46,12 @@ class AuthController extends Controller
             ]);
             DB::table('users_info')->insert(['id'=>$user['id']]);
             DB::commit();
+            $token = JWTAuth::fromUser($user);
+            return response()->json(compact('user','token'),201);
         } catch (\Exception $e) {
             DB::rollBack();
+            return response()->json('Error created user',500);
         }
-
-        $token = JWTAuth::fromUser($user);
-
-        return response()->json(compact('user','token'),201);
     }
 
     /**
@@ -63,9 +62,8 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
-
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (! $token = auth()->attempt($credentials)) { // если введены неправильные данные, вернуть ошибку 403
+            return response()->json(['error' => 'Неверные данные. Авторизоваться не удалось'], 403);
         }
 
         return $this->respondWithToken($token);
